@@ -1,0 +1,13 @@
+body {
+  padding: 50px;
+  font: 14px 'Source Sans Pro', sans-serif;
+  box-sizing: border-box;
+}
+
+a {
+  color: #00B7FF;
+}
+table, th, td {
+   border: 1px solid black;
+   border-collapse: collapse;
+}

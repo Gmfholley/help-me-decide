@@ -9,9 +9,9 @@
 	<h1><%= title %></h1>
 	<p>Welcome to <%= title %></p>
 
-	<div class="all-decisions">
+	<div class="all-decisions" id="decisions-pad">
 		<% 	for (var i = 0; i < defaultCriteria.length; i ++ ){ %>
-			<div class="decision color-<%= i % 5 + 1 %>"><%= defaultCriteria[i] %></div>
+			<div class="decision color-<%= i % 5 + 1 %>" id="decision-<%= i %>" draggable="true"><%= defaultCriteria[i] %></div>
 
 		<% } %>
 	</div>
@@ -19,10 +19,10 @@
 		<thead>
 			<tr>
 				<th class="disabled" id="choice-heading">Choices</th>
-				<th class="computed-width priorities"> Criteria 1 <span class="percent"></span> </th>
-				<th class="computed-width priorities"> Criteria 2 <span class="percent"></span></th>
-				<th class="computed-width priorities"> Criteria 3 <span class="percent"></span></th>
-				<th class="computed-width priorities"> Criteria 4 <span class="percent"></span></th>
+				<th class="computed-width priorities" id="priority-1"> + <span class="percent"></span> </th>
+				<th class="computed-width priorities" id="priority-2"> + <span class="percent"></span></th>
+				<th class="computed-width priorities" id="priority-3"> + <span class="percent"></span></th>
+				<th class="computed-width priorities" id="priority-4"> + <span class="percent"></span></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -49,10 +49,23 @@
 		</tbody>
 	</table>
 
+	<div id="final-test"></div>
+
 	<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascripts/colresizable-1.6.min.js"></script>
 	<script>
 		$(function(){
+			function allowDrop(ev) {
+			    ev.preventDefault();
+			}
+
+
+
+			function drop(ev) {
+			    ev.preventDefault();
+			    var data = ev.dataTransfer.getData("text");
+			    ev.target.appendChild(document.getElementById(data));
+			}
 			//finding a class called color-n, cycles to next class color from 1 to numColors
 			var cycleColor = function(e) {
 				var numColors = <%= numColors %>;
@@ -72,9 +85,10 @@
 			var computeWidths = function(){
 				// cannot trust that sum of all columns = width of table due to margin, border, and browser overflow rules
 				var totalWidth = 0;
+
 				$(".computed-width").each(function() {
 				totalWidth += $(this).width();
-				})
+				});
 				$(".computed-width").each(function() {
 					$(this).children(".percent").text(String(Math.round($(this).width() / totalWidth * 100)) + "%"); 
 				});
@@ -99,8 +113,25 @@
 			});
 
 			$(document).ready(function(){
+				// compute initial column widths
 				computeWidths();
+				// add onclick event to cycle color for all decisions
 				$('.decision').click(cycleColor);
+				// make all decisions draggable
+				$('.decision').on("dragstart", function (event) {
+					event.originalEvent.dataTransfer.setData("text", event.target.id);
+				});
+				// make all-decisions and priorities droppable
+				$('.all-decisions, .priorities').on("drop", function(event){
+					event.preventDefault();
+				  	event.stopPropagation();
+				    var data = event.originalEvent.dataTransfer.getData("text");
+				    event.target.appendChild(document.getElementById(data));
+				});
+				$('.all-decisions, .priorities').on("dragover", function(event){
+					event.preventDefault();
+					event.stopPropagation();
+				});
 			})
 		});
 	</script>

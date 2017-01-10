@@ -11,6 +11,10 @@ table, th, td {
    border: 1px solid black;
    border-collapse: collapse;
 }
+.all-decisions {
+	margin: 5px 0px;
+	background-color: #efefef;
+}
 .decision {
 	display: inline-block;
 	margin: 5px;
@@ -33,4 +37,14 @@ table, th, td {
 }
 .color-5 {
 	background-color: #82F8FF;
+}
+.priorities {
+	height:20px;
+	margin: 5px 20px;
+	background-color: #efefef;
+}
+#final-test {
+	width: 200px;
+	height: 200px;
+	background-color: #efefef;
 }

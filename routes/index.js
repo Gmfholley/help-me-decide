@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
 	title: "Wendy's silly site",
 	rankRange: 5,
 	numCriteria: 4,
+	numColors: 5,
 	defaultCriteria: ["Cost", "Resources", "Customer Pain", "Urgency", "Buy-In", "Effect on Other Systems", "Difficulty", "Time", "Root Causes Addressed", "Extent Resolved", "Return on Investment", "Safety", "Training", "Team Control", "Cost to Maintain"]
 	});
 });

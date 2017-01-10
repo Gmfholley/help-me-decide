@@ -11,3 +11,26 @@ table, th, td {
    border: 1px solid black;
    border-collapse: collapse;
 }
+.decision {
+	display: inline-block;
+	margin: 5px;
+	padding: 15px;
+	border: #efefef 1px;
+	border-radius: 5px;
+	background-color: #eeeeee;
+}
+.color-1 {
+	background-color: #FFD189;
+}
+.color-2 {
+	background-color: #E88F82;
+}
+.color-3 {
+	background-color: #FBCFFF;
+}
+.color-4 {
+	background-color: #868CE8;
+}
+.color-5 {
+	background-color: #82F8FF;
+}

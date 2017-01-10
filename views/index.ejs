@@ -1,85 +1,108 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">	
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+	<head>
+	<title><%= title %></title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">	
+	</head>
+	<body>
+	<h1><%= title %></h1>
+	<p>Welcome to <%= title %></p>
 
-    <div class="all-decisions">
-    	<% 	for (var i = 0; i < defaultCriteria.length; i ++ ){ %>
-    		<span class="decision"><%= defaultCriteria[i] %></span>
+	<div class="all-decisions">
+		<% 	for (var i = 0; i < defaultCriteria.length; i ++ ){ %>
+			<div class="decision color-<%= i % 5 + 1 %>"><%= defaultCriteria[i] %></div>
 
-    	<% } %>
-    </div>
-    <table id="sample" width="80%">
-    	<thead>
+		<% } %>
+	</div>
+	<table id="sample" width="100%">
+		<thead>
 			<tr>
-    			<th class="disabled" id="choice-heading">Choices</th>
-    			<th class="computed-width"> Criteria 1 <span class="percent"></span> </th>
-    			<th class="computed-width"> Criteria 2 <span class="percent"></span></th>
-    			<th class="computed-width"> Criteria 3 <span class="percent"></span></th>
-    			<th class="computed-width"> Criteria 4 <span class="percent"></span></th>
-    		</tr>
-    	</thead>
-    	<tbody>
-    		<tr>
-    			<td class="disabled">Choice 1</td>
-    			<% for(var j = 0; j < numCriteria; j++ ){ %>
-    			<td>
-    				<select>
-    				<%	for(var i = 1; i <= rankRange; i ++){ %>
-    					<option value=<%= i %>><%= i %></option>
-    			
-	    			<% } %>
-	    			</select>
-	    		</td>
+				<th class="disabled" id="choice-heading">Choices</th>
+				<th class="computed-width priorities"> Criteria 1 <span class="percent"></span> </th>
+				<th class="computed-width priorities"> Criteria 2 <span class="percent"></span></th>
+				<th class="computed-width priorities"> Criteria 3 <span class="percent"></span></th>
+				<th class="computed-width priorities"> Criteria 4 <span class="percent"></span></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="disabled">Choice 1</td>
+				<% for(var j = 0; j < numCriteria; j++ ){ %>
+				<td>
+					<select>
+					<%	for(var i = 1; i <= rankRange; i ++){ %>
+						<option value=<%= i %>><%= i %></option>
+				
+					<% } %>
+					</select>
+				</td>
 				<% } %>
-    		</tr>
-    		<tr>
-    			<td class="disabled">Choice 2</td>
-    			<td> 5 </td>
-    			<td> 5 </td>
-    			<td> 5 </td>
-    			<td> 5 </td>
-    		</tr>
-    	</tbody>
-    </table>
+			</tr>
+			<tr>
+				<td class="disabled">Choice 2</td>
+				<td> 5 </td>
+				<td> 5 </td>
+				<td> 5 </td>
+				<td> 5 </td>
+			</tr>
+		</tbody>
+	</table>
 
-    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
-    <script type="text/javascript" src="/javascripts/colresizable-1.6.min.js"></script>
-    <script>
-    	$(function(){
-    	  var computeWidths = function(){
-    	  	// cannot trust that sum of all columns = width of table due to margin, border, and browser overflow rules
-    	  	var totalWidth = 0;
-    	  	$(".computed-width").each(function() {
+	<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/colresizable-1.6.min.js"></script>
+	<script>
+		$(function(){
+			//finding a class called color-n, cycles to next class color from 1 to numColors
+			var cycleColor = function(e) {
+				var numColors = <%= numColors %>;
+				var element = $(e.currentTarget);
+				var colorClass = element.attr("class").match(/color-\d/)[0];
+				var currentColor = parseInt(colorClass.substr(colorClass.length - 1));
+				if (currentColor === numColors){
+					var newColor = 1
+				} else {
+					var newColor = currentColor + 1;
+				}
+				element.removeClass(colorClass);
+				element.addClass("color-" + String(newColor));
+			}
+
+			// Adds % widths for each column in table with 'computed-width' css classes on headers
+			var computeWidths = function(){
+				// cannot trust that sum of all columns = width of table due to margin, border, and browser overflow rules
+				var totalWidth = 0;
+				$(".computed-width").each(function() {
 				totalWidth += $(this).width();
-    	  	})
-    	  	$(".computed-width").each(function() {
-    	  		$(this).children(".percent").text(String(Math.round($(this).width() / totalWidth * 100)) + "%"); 
-    	  	});
-    	  }
-		  var onSampleResized = function(e){  
-		    var table = $(e.currentTarget); //reference to the resized table
-		    computeWidths();
-		  };  
-		  $("#sample").colResizable({
-		    resizeMode:'fit',
-		    liveDrag:true,
-		    postbackSafe:true,
-		    partialRefresh:true,
-		    draggingClass:"dragging",
-		    onResize: onSampleResized,
-		    disabledColumns: [0]
-		  });
-		  $(document).ready(function(){
-		  	computeWidths();
-		  })
+				})
+				$(".computed-width").each(function() {
+					$(this).children(".percent").text(String(Math.round($(this).width() / totalWidth * 100)) + "%"); 
+				});
+			};
+
+			//callback for column resizable
+			var onSampleResized = function(e){	
+				var table = $(e.currentTarget); //reference to the resized table
+				computeWidths();
+			};
+
+			// initialize column Resizable
+			$("#sample").colResizable({
+				resizeMode:'fit',
+				liveDrag:true,
+				postbackSafe:true,
+				partialRefresh:true,
+				draggingClass:"dragging",
+				onResize: onSampleResized,
+				disabledColumns: [0],
+				onDrag: onSampleResized
+			});
+
+			$(document).ready(function(){
+				computeWidths();
+				$('.decision').click(cycleColor);
+			})
 		});
-    </script>
-  </body>
+	</script>
+	</body>
 </html>

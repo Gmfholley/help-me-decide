@@ -19,10 +19,10 @@
 		<thead>
 			<tr>
 				<th class="disabled" id="choice-heading">Choices</th>
-				<th class="computed-width priorities" id="priority-1"> + <span class="percent"></span> </th>
-				<th class="computed-width priorities" id="priority-2"> + <span class="percent"></span></th>
-				<th class="computed-width priorities" id="priority-3"> + <span class="percent"></span></th>
-				<th class="computed-width priorities" id="priority-4"> + <span class="percent"></span></th>
+				<th class="computed-width priorities empty" id="priority-1"><span class="percent"></span> </th>
+				<th class="computed-width priorities empty" id="priority-2"><span class="percent"></span></th>
+				<th class="computed-width priorities empty" id="priority-3"><span class="percent"></span></th>
+				<th class="computed-width priorities empty" id="priority-4"><span class="percent"></span></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -63,7 +63,7 @@
 
 			function drop(ev) {
 			    ev.preventDefault();
-			    var data = ev.dataTransfer.getData("text");
+			    var data = ev.originalEvent.dataTransfer.getData("text");
 			    ev.target.appendChild(document.getElementById(data));
 			}
 			//finding a class called color-n, cycles to next class color from 1 to numColors
@@ -125,8 +125,32 @@
 				$('.all-decisions, .priorities').on("drop", function(event){
 					event.preventDefault();
 				  	event.stopPropagation();
+				  	var mydiv = event.target;
 				    var data = event.originalEvent.dataTransfer.getData("text");
-				    event.target.appendChild(document.getElementById(data));
+				    // make sure the target is the theader
+					while (! (mydiv.className.includes('priorities') || mydiv.className.includes('all-decisions'))){
+						mydiv = mydiv.parentElement;
+					}
+					//priorities table headers
+					//only allow if empty
+					if (mydiv.className.includes('priorities') && mydiv.className.includes('empty')){
+						var dragged = document.getElementById(data);
+						//if being dragged from one column to another
+						if (dragged.parentElement.className.includes('priorities')){
+							dragged.parentElement.classList.add('empty');
+						}
+						mydiv.insertBefore(dragged, mydiv.children[0]);
+						mydiv.classList.remove('empty');
+
+					} else if (mydiv.className.includes('all-decisions')) {
+						var dragged = document.getElementById(data);
+						if (dragged.parentElement.className.includes('priorities')){
+							dragged.parentElement.classList.add('empty');
+						}
+						dragged.parentElement.classList.add('empty');
+						mydiv.appendChild(dragged);
+					}
+				    
 				});
 				$('.all-decisions, .priorities').on("dragover", function(event){
 					event.preventDefault();

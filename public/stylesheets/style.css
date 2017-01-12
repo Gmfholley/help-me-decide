@@ -43,6 +43,14 @@ table, th, td {
 	margin: 5px 20px;
 	background-color: #efefef;
 }
+.priorities::before {
+	content:'+';
+	font-family: Arial;
+	font-size: 3em;
+	color: white;
+	border-width: 20px black;
+}
+
 #final-test {
 	width: 200px;
 	height: 200px;

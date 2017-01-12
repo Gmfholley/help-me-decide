@@ -27,7 +27,7 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td class="disabled">Choice 1</td>
+				<td class="disabled"><p class="input-allowed">Choice 1</p></td>
 				<% for(var j = 0; j < numCriteria; j++ ){ %>
 				<td>
 					<select>
@@ -40,7 +40,7 @@
 				<% } %>
 			</tr>
 			<tr>
-				<td class="disabled">Choice 2</td>
+				<td class="disabled"><p class="input-allowed">Choice 2</p</td>
 				<td> 5 </td>
 				<td> 5 </td>
 				<td> 5 </td>
@@ -49,23 +49,27 @@
 		</tbody>
 	</table>
 
-	<div id="final-test"></div>
-
+	<input id="currentInput" type="text"></input>
 	<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascripts/colresizable-1.6.min.js"></script>
 	<script>
 		$(function(){
-			function allowDrop(ev) {
-			    ev.preventDefault();
+			var allowEdit = function (e){
+				var origTarget = $(e.target);
+				var text = origTarget[0].innerText;
+				origTarget.parent().append('<input class="input-class"/>');
+				var input = origTarget.parent().children('input');
+				input.val(text);
+				origTarget[0].innerText = '';
+				input.on('keyup', function(e){
+					var origTarget = $(e.target).parent().children('.input-allowed');
+					if (e.keyCode === 13) {
+				        origTarget[0].innerText = $(e.target).val();
+				        $(e.target).remove();
+				    }
+				});
 			}
 
-
-
-			function drop(ev) {
-			    ev.preventDefault();
-			    var data = ev.originalEvent.dataTransfer.getData("text");
-			    ev.target.appendChild(document.getElementById(data));
-			}
 			//finding a class called color-n, cycles to next class color from 1 to numColors
 			var cycleColor = function(e) {
 				var numColors = <%= numColors %>;
@@ -79,6 +83,10 @@
 				}
 				element.removeClass(colorClass);
 				element.addClass("color-" + String(newColor));
+				if (element.parent().attr('class').match(/color-\d/)) {
+					element.parent().removeClass(colorClass);
+					element.parent().addClass("color-" + String(newColor));
+				}
 			}
 
 			// Adds % widths for each column in table with 'computed-width' css classes on headers
@@ -163,6 +171,7 @@
 					event.preventDefault();
 					event.stopPropagation();
 				});
+				$('.input-allowed').on('click', allowEdit);
 			})
 		});
 	</script>

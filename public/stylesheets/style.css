@@ -23,6 +23,13 @@ table, th, td {
 	border-radius: 5px;
 	background-color: #eeeeee;
 }
+.new-decision {
+	border: 1px #ababab solid;
+}
+.choice {
+	margin-left: 5px;
+	margin-right: 5px;
+}
 .color-1 {
 	background-color: #FFD189;
 }

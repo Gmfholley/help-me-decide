@@ -4,6 +4,7 @@
 	<title><%= title %></title>
 	<link rel='stylesheet' href='/stylesheets/style.css' />
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
 	<body>
 	<h1><%= title %></h1>
@@ -14,49 +15,46 @@
 			<div class="decision color-<%= i % 5 + 1 %>" id="decision-<%= i %>" draggable="true"><%= defaultCriteria[i] %></div>
 
 		<% } %>
+		<div class="decision new-decision">+</div>
 	</div>
 	<table id="sample" width="100%">
 		<thead>
 			<tr>
 				<th class="disabled" id="choice-heading">Choices</th>
-				<th class="computed-width priorities empty" id="priority-1"><p class="percent"></p> </th>
-				<th class="computed-width priorities empty" id="priority-2"><p class="percent"></p></th>
-				<th class="computed-width priorities empty" id="priority-3"><p class="percent"></p></th>
-				<th class="computed-width priorities empty" id="priority-4"><p class="percent"></p></th>
+				<% for(var j = 0; j < numCriteria; j++ ){ %>
+					<th class="computed-width priorities empty" id="priority-<%= numCriteria + 1 %>"><p class="percent"></p> </th>
+				<% } %>
 			</tr>
 		</thead>
 		<tbody>
+		<% for (var i =0; i < choices.length; i ++) { %>
 			<tr>
-				<td class="disabled"><p class="input-allowed">Choice 1</p></td>
+				<td class="disabled"><p class="input-allowed choice"><%= choices[i] %> <i class="fa fa-edit"></i></p></td>
 				<% for(var j = 0; j < numCriteria; j++ ){ %>
 				<td>
 					<select>
-					<%	for(var i = 1; i <= rankRange; i ++){ %>
-						<option value=<%= i %>><%= i %></option>
+					<%	for(var k = 1; k <= rankRange; k ++){ %>
+						<option value=<%= k %>><%= k %></option>
 				
 					<% } %>
 					</select>
 				</td>
 				<% } %>
 			</tr>
-			<tr>
-				<td class="disabled"><p class="input-allowed">Choice 2</p</td>
-				<td> 5 </td>
-				<td> 5 </td>
-				<td> 5 </td>
-				<td> 5 </td>
-			</tr>
+		<% } %>
 		</tbody>
 	</table>
 
-	<input id="currentInput" type="text"></input>
 	<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascripts/colresizable-1.6.min.js"></script>
 	<script>
 		$(function(){
 			var allowEdit = function (e){
+				while (! e.target.className.includes('input-allowed')) {
+					e.target = e.target.parentElement;
+				}
 				var origTarget = $(e.target);
-				var text = origTarget[0].innerText;
+				var text = origTarget[0].innerText.trim();
 				origTarget.parent().append('<input class="input-class"/>');
 				var input = origTarget.parent().children('input');
 				input.val(text);
@@ -64,10 +62,25 @@
 				input.on('keyup', function(e){
 					var origTarget = $(e.target).parent().children('.input-allowed');
 					if (e.keyCode === 13) {
-				        origTarget[0].innerText = $(e.target).val();
+				        origTarget[0].innerText = $(e.target).val() + ' ';
+				        origTarget.append('<i class="fa fa-edit"></i>');
 				        $(e.target).remove();
 				    }
 				});
+			}
+
+			var newDecision = function(e){
+				$('<input class="decision color-1"></>').insertBefore(e.target).on('keyup', function(e){
+					if (e.keyCode === 13) {
+				        var newDec = $(e.target).val();
+				        var lastId = $('.decision:not(.new-decision)').length + 1;
+				        var newLastId = 'decision-' + lastId;
+				        $('<div class="decision color-1" id="' + newLastId + '" draggable="true"></div>').insertBefore(e.target);
+			        	$('#'+newLastId).click(cycleColor)[0].innerText = newDec;
+			        	$('#'+newLastId).on("dragstart", dragStart);
+				        $(e.target).remove();
+				    }
+				})
 			}
 
 			//finding a class called color-n, cycles to next class color from 1 to numColors
@@ -108,6 +121,45 @@
 				computeWidths();
 			};
 
+			var dragStart = function(event) {
+				event.originalEvent.dataTransfer.setData("text", event.target.id);
+			}
+			var dropEvent = function(event){
+				event.preventDefault();
+			  	event.stopPropagation();
+			  	var mydiv = event.target;
+			    var data = event.originalEvent.dataTransfer.getData("text");
+			    
+			    // make sure the target is the outer div - priorities or all-decisions
+				while (! (mydiv.className.includes('priorities') || mydiv.className.includes('all-decisions'))){
+					mydiv = mydiv.parentElement;
+				}
+
+				//priorities  = table headers
+				//only allow to drop if empty
+				if (mydiv.className.includes('priorities') && mydiv.className.includes('empty')){
+					var dragged = document.getElementById(data);
+					//if being dragged from one column to another
+					if (dragged.parentElement.className.includes('priorities')){
+						dragged.parentElement.classList.add('empty');
+						var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
+						dragged.parentElement.classList.remove(colorClass);
+					}
+					mydiv.insertBefore(dragged, mydiv.children[0]);
+					mydiv.classList.remove('empty');
+					var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
+					mydiv.classList.add(colorClass);
+
+				} else if (mydiv.className.includes('all-decisions')) {
+					var dragged = document.getElementById(data);
+					if (dragged.parentElement.className.includes('priorities')){
+						dragged.parentElement.classList.add('empty');
+						var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
+						dragged.parentElement.classList.remove(colorClass);
+					}
+					mydiv.insertBefore(dragged, $('.new-decision')[0]);
+				}
+			}
 			// initialize column Resizable
 			$("#sample").colResizable({
 				resizeMode:'fit',
@@ -126,52 +178,16 @@
 				// add onclick event to cycle color for all decisions
 				$('.decision').click(cycleColor);
 				// make all decisions draggable
-				$('.decision').on("dragstart", function (event) {
-					event.originalEvent.dataTransfer.setData("text", event.target.id);
-				});
+				$('.decision').on("dragstart", dragStart);
 				// make all-decisions and priorities droppable
-				$('.all-decisions, .priorities').on("drop", function(event){
-					event.preventDefault();
-				  	event.stopPropagation();
-				  	var mydiv = event.target;
-				    var data = event.originalEvent.dataTransfer.getData("text");
-				    
-				    // make sure the target is the outer div - priorities or all-decisions
-					while (! (mydiv.className.includes('priorities') || mydiv.className.includes('all-decisions'))){
-						mydiv = mydiv.parentElement;
-					}
-
-					//priorities  = table headers
-					//only allow to drop if empty
-					if (mydiv.className.includes('priorities') && mydiv.className.includes('empty')){
-						var dragged = document.getElementById(data);
-						//if being dragged from one column to another
-						if (dragged.parentElement.className.includes('priorities')){
-							dragged.parentElement.classList.add('empty');
-							var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
-							dragged.parentElement.classList.remove(colorClass);
-						}
-						mydiv.insertBefore(dragged, mydiv.children[0]);
-						mydiv.classList.remove('empty');
-						var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
-						mydiv.classList.add(colorClass);
-
-					} else if (mydiv.className.includes('all-decisions')) {
-						var dragged = document.getElementById(data);
-						if (dragged.parentElement.className.includes('priorities')){
-							dragged.parentElement.classList.add('empty');
-							var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
-							dragged.parentElement.classList.remove(colorClass);
-						}
-						mydiv.appendChild(dragged);
-					}
-				    
-				});
+				$('.all-decisions, .priorities').on("drop", dropEvent);
 				$('.all-decisions, .priorities').on("dragover", function(event){
 					event.preventDefault();
 					event.stopPropagation();
 				});
 				$('.input-allowed').on('click', allowEdit);
+				$('.new-decision').off('click', cycleColor);
+				$('.new-decision').click(newDecision);
 			})
 		});
 	</script>

@@ -41,16 +41,28 @@ table, th, td {
 .priorities {
 	height:20px;
 	margin: 5px 20px;
+}
+.priorities.empty {
+	padding-top: 20px;
 	background-color: #efefef;
 }
-.priorities::before {
+.priorities.empty::before {
 	content:'+';
 	font-family: Arial;
 	font-size: 3em;
 	color: white;
 	border-width: 20px black;
 }
-
+.priorities .decision {
+	width: 100%;
+	margin: 0px 0px;
+	padding: 30px 0px;
+	border-radius: 0px;
+	border-width: 0px;
+}
+.percent {
+	margin: 0px 0px;
+}
 #final-test {
 	width: 200px;
 	height: 200px;

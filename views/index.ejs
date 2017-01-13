@@ -7,9 +7,11 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
 	<body>
-	<h1><%= title %></h1>
-	<p>Welcome to <%= title %></p>
+	<h1 class="input-allowed"><%= title %></h1>
+	<p class="input-allowed">Welcome to <%= title %></p>
 
+
+	<div class="all-decisions-show"></div>
 	<div class="all-decisions" id="decisions-pad">
 		<% 	for (var i = 0; i < defaultCriteria.length; i ++ ){ %>
 			<div class="decision color-<%= i % 5 + 1 %>" id="decision-<%= i %>" draggable="true"><%= defaultCriteria[i] %></div>
@@ -55,12 +57,12 @@
 				}
 				var origTarget = $(e.target);
 				var text = origTarget[0].innerText.trim();
-				origTarget.parent().append('<input class="input-class"/>');
+				var input = origTarget.before('<input class="input-class"/>');
 				var input = origTarget.parent().children('input');
 				input.val(text);
 				origTarget[0].innerText = '';
 				input.on('keyup', function(e){
-					var origTarget = $(e.target).parent().children('.input-allowed');
+					var origTarget = $(e.target).next('.input-allowed');
 					if (e.keyCode === 13) {
 				        origTarget[0].innerText = $(e.target).val() + ' ';
 				        origTarget.append('<i class="fa fa-edit"></i>');
@@ -149,7 +151,7 @@
 					mydiv.classList.remove('empty');
 					var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
 					mydiv.classList.add(colorClass);
-
+				// if being dragged back to the pool of all decisions
 				} else if (mydiv.className.includes('all-decisions')) {
 					var dragged = document.getElementById(data);
 					if (dragged.parentElement.className.includes('priorities')){
@@ -188,6 +190,9 @@
 				$('.input-allowed').on('click', allowEdit);
 				$('.new-decision').off('click', cycleColor);
 				$('.new-decision').click(newDecision);
+				$('.all-decisions-show').click(function(e){
+					$('.all-decisions').toggleClass('hide');
+				})
 			})
 		});
 	</script>

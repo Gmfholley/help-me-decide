@@ -11,9 +11,31 @@ table, th, td {
    border: 1px solid black;
    border-collapse: collapse;
 }
+.all-decisions-show{
+	line-height: 3em;
+	background-color: #cdcdcd;
+	text-align: center;
+}
+.all-decisions-show::after {
+	content: '+';
+	font-family: Arial;
+	font-size: 3em;
+	color: white;
+	border-width: 20px black;
+}
 .all-decisions {
-	margin: 5px 0px;
+	margin: 0px 0px 5px 0px;
 	background-color: #efefef;
+	max-height: 400px;
+	overflow: hidden;
+	-webkit-transition: height 1s; 
+	-moz-transition: max-height 1s; 
+	-ms-transition: max-height 1s; 
+	-o-transition: max-height 1s; 
+	transition: max-height 1s;  
+}
+.all-decisions.hide {
+	max-height: 0px;
 }
 .decision {
 	display: inline-block;

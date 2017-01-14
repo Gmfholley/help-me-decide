@@ -208,6 +208,7 @@
 			var onSampleResized = function(e){	
 				var table = $(e.currentTarget); //reference to the resized table
 				computeWidths();
+				calculateAllRanks();
 			};
 
 			var dragStart = function(event) {

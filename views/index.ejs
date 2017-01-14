@@ -2,6 +2,7 @@
 <html>
 	<head>
 	<title><%= title %></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel='stylesheet' href='/stylesheets/style.css' />
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -11,13 +12,13 @@
 	<p class="input-allowed text-center">Welcome to <%= title %> <i class="fa fa-edit"></i></p>
 
 
-	<div class="all-decisions-show"></div>
-	<div class="all-decisions" id="decisions-pad">
+	<div class="all-criterias-show"></div>
+	<div class="all-criterias" id="criterias-pad">
 		<% 	for (var i = 0; i < defaultCriteria.length; i ++ ){ %>
-			<div class="decision color-<%= i % 5 + 1 %>" id="decision-<%= i %>" draggable="true"><%= defaultCriteria[i] %></div>
+			<div class="criteria color-<%= i % 5 + 1 %>" id="criteria-<%= i %>" draggable="true"><%= defaultCriteria[i] %></div>
 
 		<% } %>
-		<div class="decision new-decision">+</div>
+		<div class="criteria new-criteria">+</div>
 	</div>
 	<table id="sample" width="100%">
 		<thead>
@@ -26,6 +27,7 @@
 				<% for(var j = 0; j < numCriteria; j++ ){ %>
 					<th class="computed-width priorities empty" id="priority-<%= numCriteria + 1 %>"><p class="percent"></p> </th>
 				<% } %>
+				<th class="disabled" id="final-heading">Decision</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -33,25 +35,64 @@
 			<tr>
 				<td class="disabled"><p class="input-allowed choice"><%= choices[i] %> <i class="fa fa-edit"></i></p></td>
 				<% for(var j = 0; j < numCriteria; j++ ){ %>
-				<td>
-					<select>
-					<%	for(var k = 1; k <= rankRange; k ++){ %>
-						<option value=<%= k %>><%= k %></option>
-				
-					<% } %>
-					</select>
+				<td class="result">
+					<p class="p-result" data-choice="<%= i %>" data-criteria="<%= j %>" id="result-choice<%= i %>-criteria-<%= j %>">15</p>
+					<nav class="rank" data-choice="<%= i %>" data-criteria="<%= j %>">
+						<input type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="1" id="choice-<%= i %>-criteria-<%= j %>-1" checked>
+						<label for="choice-<%= i %>-criteria-<%= j %>-1">1</label>
+						<input type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="2" id="choice-<%= i %>-criteria-<%= j %>-2" >
+						<label for="choice-<%= i %>-criteria-<%= j %>-2">2</label>
+						<input type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="3" id="choice-<%= i %>-criteria-<%= j %>-3" >
+						<label for="choice-<%= i %>-criteria-<%= j %>-3">3</label>
+						<input type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="4" id="choice-<%= i %>-criteria-<%= j %>-4" >
+						<label for="choice-<%= i %>-criteria-<%= j %>-4">4</label>
+						<input type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="5" id="choice-<%= i %>-criteria-<%= j %>-5" >
+						<label for="choice-<%= i %>-criteria-<%= j %>-5">5</label>
+					</nav>
 				</td>
 				<% } %>
+				<td class="disabled"><p class="decision" id="criteria-<%= i %>">Decision</p></td>
 			</tr>
 		<% } %>
 		</tbody>
 	</table>
 
+	<nav class="large-numbers-button">
+		<span>Large Numbers are</span>
+		<input type="radio" name="large-num" value="good" id="large-good" checked>
+		<label for="large-good" class="first">Good</label>
+		<input type="radio" name="large-num" value="bad" id="large-bad">
+		<label for="large-bad">Bad</label>
+	</nav>
+	<div class="large-numbers-result">
+		<p class="large-result" id="large-result-good">It is rated high.</p>
+		<p class="large-result hide-opacity" id="large-result-bad">Costs are high.</p>
+	</div>
 	<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascripts/colresizable-1.6.min.js"></script>
 	<script>
 		$(function(){
-			function css2json(css) {
+			var calculateAllRanks = function() {
+				$(".result").each(calculateRank);
+			}
+
+			var calculateRank = function(e){
+				var width = totalWidth();
+				var square = $(this);
+				var i = 0
+				while (!square.hasClass('result')  && i < 20) {
+					square = square.parent();
+					i++;
+				}
+				
+				var valueChecked = parseInt(square.children('.rank').children('input:checked')[0].value);
+				square.children('.p-result')[0].innerText = Math.round(square.width() / width * 100 * valueChecked);
+			}
+
+			var toggleLargeNumbers = function(){
+				$('.large-result').toggleClass("hide-opacity");
+			};
+			var css2json = function(css) {
 			    var s = {};
 			    if (!css) return s;
 			    if (css instanceof CSSStyleDeclaration) {
@@ -69,7 +110,7 @@
 			        }
 			    }
 			    return s;
-			}
+			};
 			var inputStyle = {
 				"-webkit-appearance": "textfield", 
 				"user-select": "text", 
@@ -108,13 +149,13 @@
 				});
 			}
 
-			var newDecision = function(e){
-				$('<input class="decision color-1"></>').insertBefore(e.target).on('keyup', function(e){
+			var newcriteria = function(e){
+		        var lastId = $('.criteria:not(.new-criteria)').length;
+		        var newLastId = 'criteria-' + lastId;
+				$('<input class="criteria color-1" id="' + newLastId + '"></>').insertBefore(e.target).on('keyup', function(e){
 					if (e.keyCode === 13) {
 				        var newDec = $(e.target).val();
-				        var lastId = $('.decision:not(.new-decision)').length + 1;
-				        var newLastId = 'decision-' + lastId;
-				        $('<div class="decision color-1" id="' + newLastId + '" draggable="true"></div>').insertBefore(e.target);
+				        $('<div class="criteria color-1" id="' + e.target.id + '" draggable="true"></div>').insertBefore(e.target);
 			        	$('#'+newLastId).click(cycleColor)[0].innerText = newDec;
 			        	$('#'+newLastId).on("dragstart", dragStart);
 				        $(e.target).remove();
@@ -140,17 +181,19 @@
 					element.parent().addClass("color-" + String(newColor));
 				}
 			}
-
+			var totalWidth = function(){
+				var width = 0;
+				$(".computed-width").each(function() {
+					width += $(this).width();
+				});
+				return width;
+			};
 			// Adds % widths for each column in table with 'computed-width' css classes on headers
 			var computeWidths = function(){
 				// cannot trust that sum of all columns = width of table due to margin, border, and browser overflow rules
-				var totalWidth = 0;
-
+				width = totalWidth();
 				$(".computed-width").each(function() {
-				totalWidth += $(this).width();
-				});
-				$(".computed-width").each(function() {
-					$(this).children(".percent").text(String(Math.round($(this).width() / totalWidth * 100)) + "%"); 
+					$(this).children(".percent").text(String(Math.round($(this).width() / width * 100)) + "%"); 
 				});
 			};
 
@@ -169,8 +212,8 @@
 			  	var mydiv = event.target;
 			    var data = event.originalEvent.dataTransfer.getData("text");
 			    
-			    // make sure the target is the outer div - priorities or all-decisions
-				while (! (mydiv.className.includes('priorities') || mydiv.className.includes('all-decisions'))){
+			    // make sure the target is the outer div - priorities or all-criterias
+				while (! (mydiv.className.includes('priorities') || mydiv.className.includes('all-criterias'))){
 					mydiv = mydiv.parentElement;
 				}
 
@@ -188,15 +231,15 @@
 					mydiv.classList.remove('empty');
 					var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
 					mydiv.classList.add(colorClass);
-				// if being dragged back to the pool of all decisions
-				} else if (mydiv.className.includes('all-decisions')) {
+				// if being dragged back to the pool of all criterias
+				} else if (mydiv.className.includes('all-criterias')) {
 					var dragged = document.getElementById(data);
 					if (dragged.parentElement.className.includes('priorities')){
 						dragged.parentElement.classList.add('empty');
 						var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
 						dragged.parentElement.classList.remove(colorClass);
 					}
-					mydiv.insertBefore(dragged, $('.new-decision')[0]);
+					mydiv.insertBefore(dragged, $('.new-criteria')[0]);
 				}
 			}
 			// initialize column Resizable
@@ -214,22 +257,26 @@
 			$(document).ready(function(){
 				// compute initial column widths
 				computeWidths();
-				// add onclick event to cycle color for all decisions
-				$('.decision').click(cycleColor);
-				// make all decisions draggable
-				$('.decision').on("dragstart", dragStart);
-				// make all-decisions and priorities droppable
-				$('.all-decisions, .priorities').on("drop", dropEvent);
-				$('.all-decisions, .priorities').on("dragover", function(event){
+				calculateAllRanks();
+				// add onclick event to cycle color for all criterias
+				$('.criteria').click(cycleColor);
+				// make all criterias draggable
+				$('.criteria').on("dragstart", dragStart);
+				// make all-criterias and priorities droppable
+				$('.all-criterias, .priorities').on("drop", dropEvent);
+				$('.all-criterias, .priorities').on("dragover", function(event){
 					event.preventDefault();
 					event.stopPropagation();
 				});
 				$('.input-allowed').on('click', allowEdit);
-				$('.new-decision').off('click', cycleColor);
-				$('.new-decision').click(newDecision);
-				$('.all-decisions-show').click(function(e){
-					$('.all-decisions').toggleClass('hide');
-				})
+				$('.new-criteria').off('click', cycleColor);
+				$('.new-criteria').click(newcriteria);
+				$('.all-criterias-show').click(function(e){
+					$('.all-criterias').toggleClass('hide');
+				});
+				$('.large-numbers-button label').click(toggleLargeNumbers);
+				$('input[type=radio]').change(calculateRank);
+
 			})
 		});
 	</script>

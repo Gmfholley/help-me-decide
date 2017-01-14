@@ -8,14 +8,14 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
 	<body>
-	<h1 class="input-allowed text-center"><%= title %> <i class="fa fa-edit"></i></h1>
-	<p class="input-allowed text-center">Welcome to <%= title %> <i class="fa fa-edit"></i></p>
+	<h1 class="input-allowed text-center" id="title"><%= title %> <i class="fa fa-edit"></i></h1>
+	<p class="input-allowed text-center" id="subtitle"><%= subtitle %> <i class="fa fa-edit"></i></p>
 
 
 	<div class="all-criterias-show"></div>
 	<div class="all-criterias" id="criterias-pad">
-		<% 	for (var i = 0; i < defaultCriteria.length; i ++ ){ %>
-			<div class="criteria color-<%= i % 5 + 1 %>" id="criteria-<%= i %>" draggable="true"><%= defaultCriteria[i] %></div>
+		<% 	for (var i = 0; i < criteria.length; i ++ ){ %>
+			<div class="criteria color-<%= i % 5 + 1 %>" id="criteria-<%= i %>" draggable="true"><%= criteria[i] %></div>
 
 		<% } %>
 		<div class="criteria new-criteria">+</div>
@@ -38,11 +38,11 @@
 				<td class="result">
 					<p class="p-result" data-choice="<%= i %>" data-criteria="<%= j %>" id="result-choice<%= i %>-criteria-<%= j %>">15</p>
 					<nav class="rank" data-choice="<%= i %>" data-criteria="<%= j %>">
-						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="1" id="choice-<%= i %>-criteria-<%= j %>-1" checked>
+						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="1" id="choice-<%= i %>-criteria-<%= j %>-1">
 						<label for="choice-<%= i %>-criteria-<%= j %>-1">1</label>
 						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="2" id="choice-<%= i %>-criteria-<%= j %>-2" >
 						<label for="choice-<%= i %>-criteria-<%= j %>-2">2</label>
-						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="3" id="choice-<%= i %>-criteria-<%= j %>-3" >
+						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="3" id="choice-<%= i %>-criteria-<%= j %>-3" checked>
 						<label for="choice-<%= i %>-criteria-<%= j %>-3">3</label>
 						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="4" id="choice-<%= i %>-criteria-<%= j %>-4" >
 						<label for="choice-<%= i %>-criteria-<%= j %>-4">4</label>
@@ -65,8 +65,8 @@
 		<label for="large-bad">Bad</label>
 	</nav>
 	<div class="large-numbers-result">
-		<p class="large-result" id="large-result-good">It is rated high.</p>
-		<p class="large-result hide-opacity" id="large-result-bad">Costs are high.</p>
+		<p class="large-result" id="large-result-good">High Ratings</p>
+		<p class="large-result hide-opacity" id="large-result-bad">High Costs</p>
 	</div>
 	<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascripts/colresizable-1.6.min.js"></script>
@@ -94,6 +94,10 @@
 				})
 
 				$('.decision.p-result[data-choice=' + choice + ']')[0].innerText = totalRow;
+			}
+
+			var jsonifyDecison = function(){
+
 			}
 
 			var toggleLargeNumbers = function(){

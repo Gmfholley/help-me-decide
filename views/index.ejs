@@ -38,20 +38,20 @@
 				<td class="result">
 					<p class="p-result" data-choice="<%= i %>" data-criteria="<%= j %>" id="result-choice<%= i %>-criteria-<%= j %>">15</p>
 					<nav class="rank" data-choice="<%= i %>" data-criteria="<%= j %>">
-						<input type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="1" id="choice-<%= i %>-criteria-<%= j %>-1" checked>
+						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="1" id="choice-<%= i %>-criteria-<%= j %>-1" checked>
 						<label for="choice-<%= i %>-criteria-<%= j %>-1">1</label>
-						<input type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="2" id="choice-<%= i %>-criteria-<%= j %>-2" >
+						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="2" id="choice-<%= i %>-criteria-<%= j %>-2" >
 						<label for="choice-<%= i %>-criteria-<%= j %>-2">2</label>
-						<input type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="3" id="choice-<%= i %>-criteria-<%= j %>-3" >
+						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="3" id="choice-<%= i %>-criteria-<%= j %>-3" >
 						<label for="choice-<%= i %>-criteria-<%= j %>-3">3</label>
-						<input type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="4" id="choice-<%= i %>-criteria-<%= j %>-4" >
+						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="4" id="choice-<%= i %>-criteria-<%= j %>-4" >
 						<label for="choice-<%= i %>-criteria-<%= j %>-4">4</label>
-						<input type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="5" id="choice-<%= i %>-criteria-<%= j %>-5" >
+						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="5" id="choice-<%= i %>-criteria-<%= j %>-5" >
 						<label for="choice-<%= i %>-criteria-<%= j %>-5">5</label>
 					</nav>
 				</td>
 				<% } %>
-				<td class="disabled"><p class="decision" id="criteria-<%= i %>">Decision</p></td>
+				<td class="disabled"><p class="decision p-result" id="criteria-<%= i %>" data-choice="<%= i %>">15</p></td>
 			</tr>
 		<% } %>
 		</tbody>
@@ -87,6 +87,13 @@
 				
 				var valueChecked = parseInt(square.children('.rank').children('input:checked')[0].value);
 				square.children('.p-result')[0].innerText = Math.round(square.width() / width * 100 * valueChecked);
+				var choice = square.children('.p-result').data('choice');
+				var totalRow = 0;
+				$('.p-result:not(.decision)[data-choice=' + choice + ']').each(function(){
+					totalRow = parseInt(this.innerText) + totalRow;
+				})
+
+				$('.decision.p-result[data-choice=' + choice + ']')[0].innerText = totalRow;
 			}
 
 			var toggleLargeNumbers = function(){
@@ -275,7 +282,7 @@
 					$('.all-criterias').toggleClass('hide');
 				});
 				$('.large-numbers-button label').click(toggleLargeNumbers);
-				$('input[type=radio]').change(calculateRank);
+				$('input[type=radio].choice').change(calculateRank);
 
 			})
 		});

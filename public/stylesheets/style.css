@@ -44,6 +44,11 @@ table, th, td {
 	margin: 5px;
 	padding: 15px;
 	border: #efefef 1px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
 	border-radius: 5px;
 	background-color: #eeeeee;
 }
@@ -70,26 +75,31 @@ table, th, td {
 .color-5 {
 	background-color: #82F8FF;
 }
-.priorities {
+.priority {
 	height:20px;
 	margin: 5px 20px;
 }
-.priorities.empty {
+.priority.empty {
 	padding-top: 20px;
 	background-color: #efefef;
 }
-.priorities.empty::before {
+.priority.empty::before {
 	content:'+';
 	font-family: Arial;
 	font-size: 3em;
 	color: white;
 	border-width: 20px black;
 }
-.priorities .criteria {
+.priority .criteria {
 	width: 100%;
 	margin: 0px 0px;
 	padding: 30px 0px;
-	border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -o-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 0px;
 	border-width: 0px;
 }
 .percent {
@@ -231,7 +241,7 @@ table, th, td {
 	body {
 		padding: 5px;
 	}
-	#sample {
+	#decision-maker {
 		width: 100%;
 	}
 	.large-numbers-button, .rank {

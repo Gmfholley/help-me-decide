@@ -19,13 +19,13 @@
 
 		<% } %>
 		<div class="criteria new-criteria">+</div>
-	</div>
-	<table id="sample" width="100%">
+	</div>	
+	<table id="decision-maker" width="100%">
 		<thead>
 			<tr>
 				<th class="disabled" id="choice-heading">Choices</th>
 				<% for(var j = 0; j < numCriteria; j++ ){ %>
-					<th class="computed-width priorities empty" id="priority-<%= numCriteria + 1 %>"><p class="percent"></p> </th>
+					<th class="computed-width priority empty" id="priority-<%= j + 1 %>"><p class="percent"></p> </th>
 				<% } %>
 				<th class="disabled" id="final-heading">Decision</th>
 			</tr>
@@ -33,7 +33,7 @@
 		<tbody>
 		<% for (var i =0; i < choices.length; i ++) { %>
 			<tr>
-				<td class="disabled"><p class="input-allowed choice"><%= choices[i] %> <i class="fa fa-edit"></i></p></td>
+				<td class="disabled"><p class="input-allowed choice" id="choice-<%= i %>"><%= choices[i] %> <i class="fa fa-edit"></i></p></td>
 				<% for(var j = 0; j < numCriteria; j++ ){ %>
 				<td class="result">
 					<p class="p-result" data-choice="<%= i %>" data-criteria="<%= j %>" id="result-choice<%= i %>-criteria-<%= j %>">15</p>
@@ -51,7 +51,7 @@
 					</nav>
 				</td>
 				<% } %>
-				<td class="disabled"><p class="decision p-result" id="criteria-<%= i %>" data-choice="<%= i %>">15</p></td>
+				<td class="disabled"><p class="decision p-result" id="decision-calc-<%= i %>" data-choice="<%= i %>">15</p></td>
 			</tr>
 		<% } %>
 		</tbody>
@@ -79,7 +79,7 @@
 			var calculateRank = function(e){
 				var width = totalWidth();
 				var square = $(this);
-				var i = 0
+				var i = 0;
 				while (!square.hasClass('result')  && i < 20) {
 					square = square.parent();
 					i++;
@@ -101,7 +101,7 @@
 			}
 
 			var toggleLargeNumbers = function(){
-				$('.large-result').toggleClass("hide-opacity");
+				$('.large-result').toggleClass('hide-opacity');
 			};
 			var css2json = function(css) {
 			    var s = {};
@@ -141,16 +141,16 @@
 				}
 				var origTarget = $(e.target);
 				var text = origTarget[0].innerText.trim();
-				var input = origTarget.before('<input class="input-class"/>');
-				var input = origTarget.parent().children('input');
-				input.val(text);
-				input.css(css2json(window.getComputedStyle(origTarget[0], null)));
-				input.css(inputStyle);
-				input.focus(function(){
-					$(this).css("outline", "-webkit-focus-ring-color auto 5px");
-				});
-				origTarget[0].innerText = '';
-				input.on('keyup', function(e){
+				var origCss = window.getComputedStyle(origTarget[0], null);
+				var input = origTarget.before('<input class="input-class"/>').siblings('input');
+				input
+					.val(text)
+					.css(css2json(origCss))
+					.css(inputStyle)
+					.focus(function(){
+						$(this).css("outline", "-webkit-focus-ring-color auto 5px");
+					})
+					.on('keyup', function(e){
 					var origTarget = $(e.target).next('.input-allowed');
 					if (e.keyCode === 13) {
 				        origTarget[0].innerText = $(e.target).val() + ' ';
@@ -158,20 +158,25 @@
 				        $(e.target).remove();
 				    }
 				});
+				// Delete after css applied
+				origTarget[0].innerText = '';
 			}
 
 			var newcriteria = function(e){
 		        var lastId = $('.criteria:not(.new-criteria)').length;
 		        var newLastId = 'criteria-' + lastId;
-				$('<input class="criteria color-1" id="' + newLastId + '"></>').insertBefore(e.target).on('keyup', function(e){
-					if (e.keyCode === 13) {
-				        var newDec = $(e.target).val();
-				        $('<div class="criteria color-1" id="' + e.target.id + '" draggable="true"></div>').insertBefore(e.target);
-			        	$('#'+newLastId).click(cycleColor)[0].innerText = newDec;
-			        	$('#'+newLastId).on("dragstart", dragStart);
-				        $(e.target).remove();
-				    }
-				})
+				$('<input class="criteria color-1" id="' + newLastId + '"></>')
+					.insertBefore(e.target)
+					.on('keyup', function(e){
+						if (e.keyCode === 13) {
+					        var newDec = $(e.target).val();
+					        $('<div class="criteria color-1" id="' + e.target.id + '" draggable="true"></div>').insertBefore(e.target);
+				        	$('#'+newLastId).click(cycleColor)
+				        		.on("dragstart", dragStart)
+				        		[0].innerText = newDec;
+					        $(e.target).remove();
+					    }
+					});
 			}
 
 			//finding a class called color-n, cycles to next class color from 1 to numColors
@@ -188,8 +193,8 @@
 				element.removeClass(colorClass);
 				element.addClass("color-" + String(newColor));
 				if (element.parent().attr('class').match(/color-\d/)) {
-					element.parent().removeClass(colorClass);
-					element.parent().addClass("color-" + String(newColor));
+					element.parent().removeClass(colorClass)
+						.addClass("color-" + String(newColor));
 				}
 			}
 			var totalWidth = function(){
@@ -221,41 +226,41 @@
 			var dropEvent = function(event){
 				event.preventDefault();
 			  	event.stopPropagation();
-			  	var mydiv = event.target;
+			  	var mydiv = $(event.target);
 			    var data = event.originalEvent.dataTransfer.getData("text");
 			    
-			    // make sure the target is the outer div - priorities or all-criterias
-				while (! (mydiv.className.includes('priorities') || mydiv.className.includes('all-criterias'))){
-					mydiv = mydiv.parentElement;
+			    // make sure the target is the outer div - priority or all-criterias
+				while (! (mydiv.hasClass('priority') || mydiv.hasClass('all-criterias')) ){
+					mydiv = mydiv.parent();
 				}
 
-				//priorities  = table headers
+				//priority  = table headers
 				//only allow to drop if empty
-				if (mydiv.className.includes('priorities') && mydiv.className.includes('empty')){
-					var dragged = document.getElementById(data);
+				if (mydiv.hasClass('priority') && mydiv.hasClass('empty')){
+					var dragged = $('#' + data);
 					//if being dragged from one column to another
-					if (dragged.parentElement.className.includes('priorities')){
-						dragged.parentElement.classList.add('empty');
-						var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
-						dragged.parentElement.classList.remove(colorClass);
+					if (dragged.parent('priority')){
+						var colorClass = dragged.attr('class').match(/color-\d/)[0];						
+						dragged.parent().addClass('empty')
+							.removeClass(colorClass);
 					}
-					mydiv.insertBefore(dragged, mydiv.children[0]);
-					mydiv.classList.remove('empty');
-					var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
-					mydiv.classList.add(colorClass);
+					dragged.insertBefore(mydiv.children());
+					mydiv.removeClass('empty');
+					var colorClass = dragged.attr("class").match(/color-\d/)[0];
+					mydiv.addClass(colorClass);
 				// if being dragged back to the pool of all criterias
-				} else if (mydiv.className.includes('all-criterias')) {
-					var dragged = document.getElementById(data);
-					if (dragged.parentElement.className.includes('priorities')){
-						dragged.parentElement.classList.add('empty');
-						var colorClass = $(dragged).attr("class").match(/color-\d/)[0];
-						dragged.parentElement.classList.remove(colorClass);
+				} else if (mydiv.hasClass('all-criterias')) {
+					var dragged = $('#' + data);
+					if (dragged.parent().hasClass('priority')) {
+						var colorClass = dragged.attr("class").match(/color-\d/)[0];
+						dragged.parent().addClass('empty')
+							.removeClass(colorClass);
 					}
-					mydiv.insertBefore(dragged, $('.new-criteria')[0]);
+					dragged.insertBefore($('.new-criteria')[0]);
 				}
 			}
 			// initialize column Resizable
-			$("#sample").colResizable({
+			$("#decision-maker").colResizable({
 				resizeMode:'fit',
 				liveDrag:true,
 				postbackSafe:true,
@@ -274,9 +279,9 @@
 				$('.criteria').click(cycleColor);
 				// make all criterias draggable
 				$('.criteria').on("dragstart", dragStart);
-				// make all-criterias and priorities droppable
-				$('.all-criterias, .priorities').on("drop", dropEvent);
-				$('.all-criterias, .priorities').on("dragover", function(event){
+				// make all-criterias and priority droppable
+				$('.all-criterias, .priority').on("drop", dropEvent);
+				$('.all-criterias, .priority').on("dragover", function(event){
 					event.preventDefault();
 					event.stopPropagation();
 				});

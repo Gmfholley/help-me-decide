@@ -10,8 +10,41 @@ router.get('/', function(req, res, next) {
 	numCriteria: 4,
 	numColors: 5,
 	choices: ["Choice 1", "Choice 2", "Choice 3"],
-	criteria: ["Cost", "Resources", "Customer Pain", "Urgency", "Buy-In", "Effect on Other Systems", "Difficulty", "Time", "Root Causes Addressed", "Extent Resolved", "Return on Investment", "Safety", "Training", "Team Control", "Cost to Maintain"]
+	criteria: ["Cost", "Resources", "Customer Pain", "Urgency", "Buy-In", "Effect on Other Systems", "Difficulty", "Time", "Root Causes Addressed", "Extent Resolved", "Return on Investment", "Safety", "Training", "Team Control", "Cost to Maintain"],
+	largeNumbers: "good"
 	});
 });
 
 module.exports = router;
+/*{
+rankRange: 5
+numColors: 5
+
+
+title:
+subtitle:
+
+numCriteria: criterias.length
+
+
+criterias: [{
+	title:
+	id:
+	parentId:
+	class/color:
+}]
+
+priorities: [{
+	id:
+	columnWidth:
+}]
+
+choices: [{
+	title:
+	id:
+	ranks: []
+}]
+
+
+}
+*/

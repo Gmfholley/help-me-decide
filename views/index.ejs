@@ -70,6 +70,7 @@
 	</div>
 	<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascripts/colresizable-1.6.min.js"></script>
+
 	<script>
 		$(function(){
 			var calculateAllRanks = function() {
@@ -173,6 +174,10 @@
 					        $('<div class="criteria color-1" id="' + e.target.id + '" draggable="true"></div>').insertBefore(e.target);
 				        	$('#'+newLastId).click(cycleColor)
 				        		.on("dragstart", dragStart)
+				        		.on("touchstart", handleTouch)
+				        		.on("touchmove", handleTouch)
+				        		.on("touchend", handleTouch)
+				        		.on("touchcancel", handleTouch)
 				        		[0].innerText = newDec;
 					        $(e.target).remove();
 					    }
@@ -219,15 +224,59 @@
 				computeWidths();
 				calculateAllRanks();
 			};
+			// wrapper handler for Touch events to create drag events
+			var handleTouch = function(event){
+				event.preventDefault();
+				var type, dispatchTarget;
+				var touch = event.originalEvent.changedTouches[0];
+				switch(event.type){
+					case "touchstart": 
+						type="dragstart"; 
+						dispatchTarget = touch.target;
+						break;
+					case "touchmove": 
+						type="drag"; 
+						dispatchTarget = touch.target;
+						break;
+					case "touchend": 
+						type="drop"; 
+						dispatchTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+						break;
+					default: return;
+				}
+				if (event.changedTouches) {
+					var firstTouch = event.changedTouches[0];
+				} else {
+					var firstTouch = event.originalEvent.changedTouches[0];
+				}
 
+				var simulatedMouse = document.createEvent("DragEvent");
+				//event.initMouseEvent(type, canBubble, cancelable, view,
+    //                  detail (clicks), screenX, screenY, clientX, clientY,
+    //                  ctrlKey, altKey, shiftKey, metaKey,
+    //                  button (0: Main button pressed), relatedTarget);
+				simulatedMouse.initMouseEvent(type, true, true, window, 
+					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
+					false, false, false, false, 0, null);
+				dispatchTarget.dispatchEvent(simulatedMouse);
+
+			}
 			var dragStart = function(event) {
-				event.originalEvent.dataTransfer.setData("text", event.target.id);
+				if (event.dataTransfer){
+					event.dataTransfer.setData("text", event.target.id);
+				} else {
+					jQuery.Event.data = {"text": event.target.id};
+				}
 			}
 			var dropEvent = function(event){
 				event.preventDefault();
 			  	event.stopPropagation();
 			  	var mydiv = $(event.target);
-			    var data = event.originalEvent.dataTransfer.getData("text");
+			  	if (event.dataTransfer){
+				    var data = event.dataTransfer.getData("text");
+			  	} else {
+				    var data = jQuery.Event.data["text"];
+			  	}
 			    
 			    // make sure the target is the outer div - priority or all-criterias
 				while (! (mydiv.hasClass('priority') || mydiv.hasClass('all-criterias')) ){
@@ -279,6 +328,12 @@
 				$('.criteria').click(cycleColor);
 				// make all criterias draggable
 				$('.criteria').on("dragstart", dragStart);
+
+				$('.criteria:not(.new-criteria)').on("touchstart", handleTouch);
+				$('.criteria:not(.new-criteria)').on("touchmove", handleTouch);
+				$('.criteria:not(.new-criteria)').on("touchend", handleTouch);
+				$('.criteria:not(.new-criteria)').on("touchcancel", handleTouch);
+
 				// make all-criterias and priority droppable
 				$('.all-criterias, .priority').on("drop", dropEvent);
 				$('.all-criterias, .priority').on("dragover", function(event){
@@ -287,7 +342,7 @@
 				});
 				$('.input-allowed').on('click', allowEdit);
 				$('.new-criteria').off('click', cycleColor);
-				$('.new-criteria').click(newcriteria);
+				$('.new-criteria').on('click', newcriteria);
 				$('.all-criterias-show').click(function(e){
 					$('.all-criterias').toggleClass('hide');
 				});

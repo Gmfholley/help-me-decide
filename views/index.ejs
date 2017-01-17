@@ -239,18 +239,19 @@
 						dispatchTarget = touch.target;
 						break;
 					case "touchend": 
-						type="drop"; 
-						dispatchTarget = document.elementFromPoint(touch.clientX, touch.clientY);
+						var dropSite = document.elementFromPoint(touch.clientX, touch.clientY);
+						if (dropSite === event.target){
+							dispatchTarget = event.target;
+							type="click";
+						} else {
+							dispatchTarget = dropSite;
+							type="drop";
+						}
 						break;
 					default: return;
 				}
-				if (event.changedTouches) {
-					var firstTouch = event.changedTouches[0];
-				} else {
-					var firstTouch = event.originalEvent.changedTouches[0];
-				}
 
-				var simulatedMouse = document.createEvent("DragEvent");
+				var simulatedMouse = document.createEvent("MouseEvent");
 				//event.initMouseEvent(type, canBubble, cancelable, view,
     //                  detail (clicks), screenX, screenY, clientX, clientY,
     //                  ctrlKey, altKey, shiftKey, metaKey,

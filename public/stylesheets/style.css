@@ -105,6 +105,14 @@ table, th, td {
 .percent {
 	margin: 0px 0px;
 }
+.first-col {
+  position:relative;
+}
+.first-col .trash-button {
+  position:absolute;
+  bottom:5px;
+  left: 5px;
+}
 .result {
 	vertical-align: top;
 }

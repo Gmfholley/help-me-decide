@@ -33,7 +33,7 @@
 		<tbody>
 		<% for (var i =0; i < choices.length; i ++) { %>
 			<tr class="choice-row" data-choice="<%= i %>">
-				<td class="disabled"><p class="input-allowed choice" id="choice-<%= i %>"><%= choices[i] %> <i class="fa fa-edit"></i></p></td>
+				<td class="disabled first-col"><p class="input-allowed choice" id="choice-<%= i %>"><%= choices[i] %> <i class="fa fa-edit"></i><i class="fa fa-trash-o trash-button"></i></p></td>
 				<% for(var j = 0; j < numCriteria; j++ ){ %>
 				<td class="result">
 					<p class="p-result" data-choice="<%= i %>" data-criteria="<%= j %>" id="criteria-<%= j %>-result-choice-<%= i %>">15</p>
@@ -134,6 +134,11 @@
 				}
 
 			}	
+
+			var deleteChoice = function () {
+
+			}
+
 			var toggleLargeNumbers = function(){
 				$('.large-result').toggleClass('hide-opacity');
 			};
@@ -188,7 +193,7 @@
 					var origTarget = $(e.target).next('.input-allowed');
 					if (e.keyCode === 13) {
 				        origTarget[0].innerText = $(e.target).val() + ' ';
-				        origTarget.append('<i class="fa fa-edit"></i>');
+				        origTarget.append('<i class="fa fa-edit"></i>').append('<i class="fa fa-trash-o trash-button"></i>');
 				        $(e.target).remove();
 				    }
 				});
@@ -235,6 +240,7 @@
 						.addClass("color-" + String(newColor));
 				}
 			}
+
 			var totalWidth = function(){
 				var width = 0;
 				$(".computed-width").each(function() {

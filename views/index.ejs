@@ -124,7 +124,7 @@
 					}
 				}
 
-
+				$('.trash-button').removeClass('disable');
 				var newChoice = parseInt($('.choice-row').last().data('choice')) + 1;
 				var newRow = $('.choice-row').last().clone(true).insertAfter($('.choice-row').last());
 				newRow.attr('data-choice', newChoice);
@@ -142,7 +142,11 @@
 					row = row.parent();
 					i++;
 				}
-				row.remove();
+				if ($('.' + row[0].classList[0]).length > 1){
+					row.remove();
+				} else {
+					$('.trash-button').addClass('disable');
+				}
 			}
 
 			var toggleLargeNumbers = function(){
@@ -199,7 +203,7 @@
 					var origTarget = $(e.target).next('.input-allowed');
 					if (e.keyCode === 13) {
 				        origTarget[0].innerText = $(e.target).val() + ' ';
-				        origTarget.append('<i class="fa fa-edit"></i>').append('<i class="fa fa-trash-o trash-button"></i>');
+				        origTarget.append('<i class="fa fa-edit"></i>');
 				        $(e.target).remove();
 				    }
 				});

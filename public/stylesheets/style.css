@@ -13,12 +13,12 @@ table, th, td {
    border: 1px solid black;
    border-collapse: collapse;
 }
-.all-criterias-show, #new-row{
+.all-criterias-show {
 	line-height: 3em;
 	background-color: #cdcdcd;
 	text-align: center;
 }
-.all-criterias-show::after, #new-row::after {
+.all-criterias-show::after {
 	content: '+';
 	font-family: Arial;
 	font-size: 3em;
@@ -75,20 +75,25 @@ table, th, td {
 .color-5 {
 	background-color: #82F8FF;
 }
-.priority {
+.priority, #new-row {
 	height:20px;
 	margin: 5px 20px;
+  overflow: hidden;
+  text-align: center;
 }
-.priority.empty {
+.priority.empty, #new-row {
 	padding-top: 20px;
 	background-color: #efefef;
 }
-.priority.empty::before {
+.priority.empty::before, #new-row::before {
 	content:'+';
 	font-family: Arial;
 	font-size: 3em;
 	color: white;
 	border-width: 20px black;
+}
+#new-row {
+  padding-top: 0px;
 }
 .priority .criteria {
 	width: 100%;
@@ -112,6 +117,9 @@ table, th, td {
   position:absolute;
   bottom:5px;
   left: 5px;
+}
+.trash-button.disable {
+  color:  #cdcdcd;
 }
 .result {
 	vertical-align: top;

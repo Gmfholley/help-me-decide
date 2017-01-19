@@ -33,7 +33,7 @@
 		<tbody>
 		<% for (var i =0; i < choices.length; i ++) { %>
 			<tr class="choice-row" data-choice="<%= i %>">
-				<td class="disabled first-col"><p class="input-allowed choice" id="choice-<%= i %>"><%= choices[i] %> <i class="fa fa-edit"></i><i class="fa fa-trash-o trash-button"></i></p></td>
+				<td class="disabled first-col"><p class="input-allowed choice" id="choice-<%= i %>"><%= choices[i] %> <i class="fa fa-edit"></i></p><i class="fa fa-trash-o trash-button"></i></td>
 				<% for(var j = 0; j < numCriteria; j++ ){ %>
 				<td class="result">
 					<p class="p-result" data-choice="<%= i %>" data-criteria="<%= j %>" id="criteria-<%= j %>-result-choice-<%= i %>">15</p>
@@ -135,8 +135,14 @@
 
 			}	
 
-			var deleteChoice = function () {
-
+			var deleteChoice = function (event) {
+				var row = $(event.target);
+				var i = 0;
+				while (! row.hasClass('choice-row') && i < 20) {
+					row = row.parent();
+					i++;
+				}
+				row.remove();
 			}
 
 			var toggleLargeNumbers = function(){
@@ -389,6 +395,7 @@
 				$('.large-numbers-button label').click(toggleLargeNumbers);
 				$('input[type=radio].choice').change(calculateRank);
 				$('#new-row').on('click', addChoice);
+				$('.trash-button').click(deleteChoice);
 
 			})
 		});

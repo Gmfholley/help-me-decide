@@ -13,12 +13,12 @@ table, th, td {
    border: 1px solid black;
    border-collapse: collapse;
 }
-.all-criterias-show{
+.all-criterias-show, #new-row{
 	line-height: 3em;
 	background-color: #cdcdcd;
 	text-align: center;
 }
-.all-criterias-show::after {
+.all-criterias-show::after, #new-row::after {
 	content: '+';
 	font-family: Arial;
 	font-size: 3em;

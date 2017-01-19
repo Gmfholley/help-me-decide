@@ -32,28 +32,29 @@
 		</thead>
 		<tbody>
 		<% for (var i =0; i < choices.length; i ++) { %>
-			<tr>
+			<tr class="choice-row" data-choice="<%= i %>">
 				<td class="disabled"><p class="input-allowed choice" id="choice-<%= i %>"><%= choices[i] %> <i class="fa fa-edit"></i></p></td>
 				<% for(var j = 0; j < numCriteria; j++ ){ %>
 				<td class="result">
-					<p class="p-result" data-choice="<%= i %>" data-criteria="<%= j %>" id="result-choice<%= i %>-criteria-<%= j %>">15</p>
+					<p class="p-result" data-choice="<%= i %>" data-criteria="<%= j %>" id="criteria-<%= j %>-result-choice-<%= i %>">15</p>
 					<nav class="rank" data-choice="<%= i %>" data-criteria="<%= j %>">
-						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="1" id="choice-<%= i %>-criteria-<%= j %>-1">
-						<label for="choice-<%= i %>-criteria-<%= j %>-1">1</label>
-						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="2" id="choice-<%= i %>-criteria-<%= j %>-2" >
-						<label for="choice-<%= i %>-criteria-<%= j %>-2">2</label>
-						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="3" id="choice-<%= i %>-criteria-<%= j %>-3" checked>
-						<label for="choice-<%= i %>-criteria-<%= j %>-3">3</label>
-						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="4" id="choice-<%= i %>-criteria-<%= j %>-4" >
-						<label for="choice-<%= i %>-criteria-<%= j %>-4">4</label>
-						<input class="choice" type="radio" name="choice-<%= i %>-criteria-<%= j %>" value="5" id="choice-<%= i %>-criteria-<%= j %>-5" >
-						<label for="choice-<%= i %>-criteria-<%= j %>-5">5</label>
+						<input class="choice" type="radio" name="criteria-<%= j %>-choice-<%= i %>" value="1" id="1-criteria-<%= j %>-choice-<%= i %>">
+						<label for="1-criteria-<%= j %>-choice-<%= i %>">1</label>
+						<input class="choice" type="radio" name="criteria-<%= j %>-choice-<%= i %>" value="2" id="2-criteria-<%= j %>-choice-<%= i %>" >
+						<label for="2-criteria-<%= j %>-choice-<%= i %>">2</label>
+						<input class="choice" type="radio" name="criteria-<%= j %>-choice-<%= i %>" value="3" id="3-criteria-<%= j %>-choice-<%= i %>" checked>
+						<label for="3-criteria-<%= j %>-choice-<%= i %>">3</label>
+						<input class="choice" type="radio" name="criteria-<%= j %>-choice-<%= i %>" value="4" id="4-criteria-<%= j %>-choice-<%= i %>" >
+						<label for="4-criteria-<%= j %>-choice-<%= i %>">4</label>
+						<input class="choice" type="radio" name="criteria-<%= j %>-choice-<%= i %>" value="5" id="5-criteria-<%= j %>-choice-<%= i %>" >
+						<label for="5-criteria-<%= j %>-choice-<%= i %>">5</label>
 					</nav>
 				</td>
 				<% } %>
 				<td class="disabled"><p class="decision p-result" id="decision-calc-<%= i %>" data-choice="<%= i %>">15</p></td>
 			</tr>
 		<% } %>
+			<tr><td class="disabled"><p id="new-row"></p></td><td></td><td></td><td></td><td></td><td class="disabled"></td></tr>
 		</tbody>
 	</table>
 
@@ -100,7 +101,39 @@
 			var jsonifyDecison = function(){
 
 			}
+			var addChoice = function() {
+				var setChildren = function() {
+					if ($(this).attr('id')) {
+						var id = $(this).attr('id');
+						$(this).attr('id', id.substring(0, id.lastIndexOf("-") + 1) + newChoice);
+					}
+					if ($(this).attr('data-choice') ) {
+						$(this).attr('data-choice', newChoice);
+						$(this).data('choice', newChoice);
+					}
+					if ($(this).attr('for') ) {
+						var prevFor = $(this).attr('for');
+						$(this).attr('for', prevFor.substring(0, prevFor.lastIndexOf("-") + 1) + newChoice);
+					}
+					if ($(this).attr('name') ) {
+						var prevName = $(this).attr('name');
+						$(this).attr('name', prevName.substring(0, prevName.lastIndexOf("-") + 1) + newChoice);
+					}
+					if ($(this).children().length > 0) {
+						$(this).children().each(setChildren);
+					}
+				}
 
+
+				var newChoice = parseInt($('.choice-row').last().data('choice')) + 1;
+				var newRow = $('.choice-row').last().clone(true).insertAfter($('.choice-row').last());
+				newRow.attr('data-choice', newChoice);
+				newRow.data('choice', newChoice);
+				if (newRow.children().length > 0 ) {
+					newRow.children().each(setChildren);
+				}
+
+			}	
 			var toggleLargeNumbers = function(){
 				$('.large-result').toggleClass('hide-opacity');
 			};
@@ -349,6 +382,7 @@
 				});
 				$('.large-numbers-button label').click(toggleLargeNumbers);
 				$('input[type=radio].choice').change(calculateRank);
+				$('#new-row').on('click', addChoice);
 
 			})
 		});

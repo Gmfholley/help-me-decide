@@ -39,7 +39,7 @@ function newDecision(req, res) {
     decisionService.create(
     { hash: newHash })
         .then(function (token) {
-            res.send({status: 200, hash: newHash, token: token});
+            res.send({ status: 200, hash: newHash, token: token});
         })
         .catch(function (err) {
             // do again, requesting a hash that is not already taken

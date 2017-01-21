@@ -16,6 +16,7 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use(session({ secret: config.secret, resave: false, saveUninitialized: true }));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -25,18 +26,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// routes
 app.use('/', index);
-
-// validate use of internal api call
-// app.use('/api', function(req, res, next){
-//     if (req.param.valid === config.secret) {
-//         next();
-//     } else {
-//         res.redirect('/');
-//     }
-// }
-
+app.use('/api/decisions/authenticate', require('./routes/api/decision'));
 app.use('/api/decisions', require('./routes/api/decision'));
+app.use('/api/decisions/new', require('./routes/api/decision'));
+app.use('/api/decisions/:id', require('./routes/api/decision'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

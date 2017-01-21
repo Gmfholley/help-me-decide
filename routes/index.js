@@ -7,18 +7,19 @@ var request = require('request');
 router.get('/', function(req, res, next) {
 	console.log(config.apiUrl + '/decisions/new?valid=' + config.secret);
 	// create new request
-	request.get(config.apiUrl + '/decisions/new?valid=' + config.secret, function(error, response, body){
+	request.get(config.apiUrl + '/decisions/new', function(error, response){
+		var body = JSON.parse(response.body);
         if (error || !body.token) {
             return res.send({ error: 'An error occurred' });
         }
         // save JWT token in the session for client side
         req.session.token = body.token;
-        console.log(response.body.hash);
-        res.redirect('/' + response.body.hash);
+        res.redirect('/' + body.hash);
 	});
 });
 
 router.get('/:hash', function(req, res, next){
+  res.cookie('token', req.session.token);
   res.render('index', { 
 	title: "Decision Maker",
 	subtitle: "What should I do?",

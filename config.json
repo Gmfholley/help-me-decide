@@ -1,6 +1,5 @@
-
 {
     "connectionString": "mongodb://localhost:27017/mean-stack-registration-login-example",
     "apiUrl": "/api",
-    "secret": process.env.SECRET;
+    "secret": "imnbhrxzv4klxkbax9wvarsdftdzyc8s"
 }

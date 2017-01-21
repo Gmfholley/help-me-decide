@@ -4,9 +4,12 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var config = require('./config.json');
+var session = require('express-session');
+var expressJwt = require('express-jwt');
+
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 
 var app = express();
 
@@ -23,7 +26,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+
+// validate use of internal api call
+// app.use('/api', function(req, res, next){
+//     if (req.param.valid === config.secret) {
+//         next();
+//     } else {
+//         res.redirect('/');
+//     }
+// }
+
+app.use('/api/decisions', require('./routes/api/decision'));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

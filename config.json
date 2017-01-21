@@ -1,5 +1,5 @@
 {
-    "connectionString": "mongodb://localhost:27017/mean-stack-registration-login-example",
-    "apiUrl": "/api",
+    "connectionString": "mongodb://localhost:27017/decision-maker",
+    "apiUrl": "http://localhost:3000/api",
     "secret": "imnbhrxzv4klxkbax9wvarsdftdzyc8s"
 }

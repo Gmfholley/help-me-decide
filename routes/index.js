@@ -5,15 +5,15 @@ var request = require('request');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-
+	console.log(config.apiUrl + '/decisions/new?valid=' + config.secret);
 	// create new request
 	request.get(config.apiUrl + '/decisions/new?valid=' + config.secret, function(error, response, body){
         if (error || !body.token) {
-            return res.render('/', { error: 'An error occurred' });
+            return res.send({ error: 'An error occurred' });
         }
         // save JWT token in the session for client side
         req.session.token = body.token;
-
+        console.log(response.body.hash);
         res.redirect('/' + response.body.hash);
 	});
 });

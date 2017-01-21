@@ -5,10 +5,10 @@ var randomstring = require('randomstring');
 var decisionService = require('../../services/decision');
 
 // routes
-router.post('/decisions/authenticate', authenticateDecision);
-router.get('/decisions/new', newDecision);
-router.get('/decisions/:_id', findDecision);
-router.put('/decisions/:_id', updateDecision);
+router.post('/authenticate', authenticateDecision);
+router.get('/new', newDecision);
+router.get('/:_id', findDecision);
+router.put('/:_id', updateDecision);
 
 
 
@@ -31,10 +31,11 @@ function authenticateDecision(req, res) {
 }
 
 function newDecision(req, res) {
+    console.log('yes');
     var newHash = randomstring.generate({
         charset: 'alphanumeric',
         capitalization: 'lowercase'
-    })
+    });
     decisionService.create(
     { hash: newHash })
         .then(function (token) {

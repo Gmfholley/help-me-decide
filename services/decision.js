@@ -49,14 +49,13 @@ function find(_id) {
 
 function create(decisionParam) {
     var deferred = Q.defer();
-
     // validate hash is unique
     db.decisions.findOne(
         { hash: decisionParam.hash },
         function (err, decision) {
             if (err) deferred.reject(err.name + ': ' + err.message);
 
-            if (hash) {
+            if (decision) {
                 deferred.reject('hash "' + decisionParam.hash + '" is already taken');
             } else {
                 createdecision();

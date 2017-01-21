@@ -7,8 +7,8 @@ var decisionService = require('../../services/decision');
 // routes
 router.post('/authenticate', authenticateDecision);
 router.get('/new', newDecision);
-router.get('/:_id', findDecision);
-router.put('/:_id', updateDecision);
+router.get('/:hash', findDecision);
+router.put('/:hash', updateDecision);
 
 
 
@@ -48,7 +48,7 @@ function newDecision(req, res) {
 }
 
 function findDecision(req, res) {
-    decisionService.find(req.hash)
+    decisionService.findByHash(req.params.hash)
         .then(function (decision) {
             if (decision) {
                 res.send(decision);

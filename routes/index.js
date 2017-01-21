@@ -5,31 +5,38 @@ var request = require('request');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	console.log(config.apiUrl + '/decisions/new?valid=' + config.secret);
 	// create new request
 	request.get(config.apiUrl + '/decisions/new', function(error, response){
+
 		var body = JSON.parse(response.body);
+
         if (error || !body.token) {
             return res.send({ error: 'An error occurred' });
         }
-        // save JWT token in the session for client side
+        // since this is a new request, save the owner token in the session to give to the client
         req.session.token = body.token;
+
         res.redirect('/' + body.hash);
 	});
 });
 
 router.get('/:hash', function(req, res, next){
-  res.cookie('token', req.session.token);
-  res.render('index', { 
-	title: "Decision Maker",
-	subtitle: "What should I do?",
-	rankRange: 5,
-	numCriteria: 4,
-	numColors: 5,
-	choices: ["Choice 1", "Choice 2", "Choice 3"],
-	criteria: ["Cost", "Resources", "Customer Pain", "Urgency", "Buy-In", "Effect on Other Systems", "Difficulty", "Time", "Root Causes Addressed", "Extent Resolved", "Return on Investment", "Safety", "Training", "Team Control", "Cost to Maintain"],
-	largeNumbers: "good"
+
+
+	// create new request
+	request.get(config.apiUrl + '/decisions/' + req.params.hash, function(error, response){
+
+		var body = JSON.parse(response.body);
+
+        if (error || !body.token) {
+            return res.send({ error: 'An error occurred' });
+        }
+       
+        res.render{
+        	"title": 
+        }
 	});
+
 })
 
 module.exports = router;

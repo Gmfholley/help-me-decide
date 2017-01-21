@@ -30,6 +30,23 @@ function authenticate(hash, _id) {
     return deferred.promise;
 }
 
+function findByHash(hash) {
+    var deferred = Q.defer();
+
+    db.decisions.findOne(
+        {hash: hash}, 
+        function (err, decision) {
+        if (err) deferred.reject(err.name + ': ' + err.message);
+
+        if (decision) {
+            deferred.resolve();
+        } else {
+            deferred.resolve();
+        }
+    });
+
+    return deferred.promise;
+}
 
 function find(_id) {
     var deferred = Q.defer();

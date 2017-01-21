@@ -31,7 +31,7 @@ app.use('/', index);
 app.use('/api/decisions/authenticate', require('./routes/api/decision'));
 app.use('/api/decisions', require('./routes/api/decision'));
 app.use('/api/decisions/new', require('./routes/api/decision'));
-app.use('/api/decisions/:id', require('./routes/api/decision'));
+app.use('/api/decisions/:hash', require('./routes/api/decision'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -30,18 +30,17 @@ router.get('/:hash', function(req, res, next){
         if (error || !body) {
             return res.send({ error: 'An error occurred' });
         }
-       
+		// test params
+		// body.title = "my test";
+		// body.subtitle="my test title";
+		// body.choices[0].title = "My test";
+		// body.criteria[0].parentId = "priority-3";
+		// body.criteria[1].parentId = "priority-1";
+		// body.criteria[2].parentId = "priority-2";
+		// body.criteria[3].parentId = "priority-4";
+       //
 		  res.cookie('token', req.session.token);
-		  res.render('index', { 
-		    title: "Decision Maker",
-		    subtitle: "What should I do?",
-		    rankRange: 5,
-		    numCriteria: 4,
-		    numColors: 5,
-		    choices: ["Choice 1", "Choice 2", "Choice 3"],
-		    criteria: ["Cost", "Resources", "Customer Pain", "Urgency", "Buy-In", "Effect on Other Systems", "Difficulty", "Time", "Root Causes Addressed", "Extent Resolved", "Return on Investment", "Safety", "Training", "Team Control", "Cost to Maintain"],
-		    largeNumbers: "good"
-		    });
+		  res.render('index', { decision: body, numColors: 5});
 
 	});
 });
@@ -106,7 +105,7 @@ criterias: [{
 	title:
 	id:
 	parentId:
-	class/color:
+	color:
 }]
 
 priorities: [{

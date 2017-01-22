@@ -153,7 +153,7 @@ function defaultDecision(decision){
     var defDecision = {
             title: "Decision Maker",
             subtitle: "What should I do?",
-            choicesTitles: ["Choices1", "Chocies2", "CHoices3"],
+            choicesTitles: ["Choice 1", "Choice 2", "Choice 3"],
             criteriaTitles: ["Cost", "Resources", "Customer Pain", "Urgency", "Buy-In", "Effect on Other Systems", "Difficulty", "Time", "Root Causes Addressed", "Extent Resolved", "Return on Investment", "Safety", "Training", "Team Control", "Cost to Maintain"],
             largeNumbers: "good",
     }
@@ -166,7 +166,7 @@ function defaultDecision(decision){
             choice.id = i + 1;
             var ranks = [];
             for(var j = 0; j < numCriteria; j ++){
-                ranks.push(3);
+                ranks.push(1);
             }
             choice.ranks = ranks;
             choices.push(choice);

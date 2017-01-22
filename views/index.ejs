@@ -1,75 +1,106 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<title><%= title %></title>
+	<title><%= decision.title %></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel='stylesheet' href='/stylesheets/style.css' />
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
 	<body>
-	<h1 class="input-allowed text-center" id="title"><%= title %> <i class="fa fa-edit"></i></h1>
-	<p class="input-allowed text-center" id="subtitle"><%= subtitle %> <i class="fa fa-edit"></i></p>
+	<h1 class="input-allowed text-center" id="title"><%= decision.title %> <i class="fa fa-edit"></i></h1>
+	<p class="input-allowed text-center" id="subtitle"><%= decision.subtitle %> <i class="fa fa-edit"></i></p>
 
 
 	<div class="all-criterias-show"></div>
 	<div class="all-criterias" id="criterias-pad">
-		<% 	for (var i = 0; i < criteria.length; i ++ ){ %>
-			<div class="criteria color-<%= i % 5 + 1 %>" id="criteria-<%= i %>" draggable="true"><%= criteria[i] %></div>
+		<% 	for (var i = 0; i < decision.criteria.length; i ++ ){ %>
+			<% var crit = decision.criteria[i];
+			if (crit.parentId == 'criterias-pad'){
+			 %>
+			<div class="criteria color-<%= crit.color %>" id="criteria-<%= crit.id %>" draggable="true"><%= crit.title %></div>
 
-		<% } %>
+			<% }
+		} %>
 		<div class="criteria new-criteria">+</div>
 	</div>	
 	<table id="decision-maker" width="100%">
 		<thead>
 			<tr>
 				<th class="disabled" id="choice-heading">Choices</th>
-				<% for(var j = 0; j < numCriteria; j++ ){ %>
-					<th class="computed-width priority empty" id="priority-<%= j + 1 %>"><p class="percent"></p> </th>
+				<% for(var j = 0; j < decision.priorities.length; j++ ){ 
+						var priority = decision.priorities[j];
+
+
+						var critChild = function(element) {
+							return element.parentId === 'priority-' + priority.id;
+						}
+
+
+
+						var child = decision.criteria.find(critChild);
+
+					%>
+					<th class="computed-width priority <%= (child) ? 'color-' + child.color : 'empty '; %>" id="priority-<%= priority.id %>">
+						<% if (child) { %>
+						<div class="criteria color-<%= child.color %>" id="criteria-<%= child.id %>" draggable="true"><%= child.title %></div>
+						<% } %>
+						<p class="percent"><%= priority.columnWidth %>%</p> 
+					</th>
 				<% } %>
 				<th class="disabled" id="final-heading">Decision</th>
 			</tr>
 		</thead>
 		<tbody>
-		<% for (var i =0; i < choices.length; i ++) { %>
+		<% for (var i =0; i < decision.choices.length; i ++) {
+			var choice = decision.choices[i];
+		 %>
 			<tr class="choice-row" data-choice="<%= i %>">
-				<td class="disabled first-col"><p class="input-allowed choice" id="choice-<%= i %>"><%= choices[i] %> <i class="fa fa-edit"></i></p><i class="fa fa-trash-o trash-button"></i></td>
-				<% for(var j = 0; j < numCriteria; j++ ){ %>
-				<td class="result">
-					<p class="p-result" data-choice="<%= i %>" data-criteria="<%= j %>" id="criteria-<%= j %>-result-choice-<%= i %>">15</p>
-					<nav class="rank" data-choice="<%= i %>" data-criteria="<%= j %>">
-						<input class="choice" type="radio" name="criteria-<%= j %>-choice-<%= i %>" value="1" id="1-criteria-<%= j %>-choice-<%= i %>">
-						<label for="1-criteria-<%= j %>-choice-<%= i %>">1</label>
-						<input class="choice" type="radio" name="criteria-<%= j %>-choice-<%= i %>" value="2" id="2-criteria-<%= j %>-choice-<%= i %>" >
-						<label for="2-criteria-<%= j %>-choice-<%= i %>">2</label>
-						<input class="choice" type="radio" name="criteria-<%= j %>-choice-<%= i %>" value="3" id="3-criteria-<%= j %>-choice-<%= i %>" checked>
-						<label for="3-criteria-<%= j %>-choice-<%= i %>">3</label>
-						<input class="choice" type="radio" name="criteria-<%= j %>-choice-<%= i %>" value="4" id="4-criteria-<%= j %>-choice-<%= i %>" >
-						<label for="4-criteria-<%= j %>-choice-<%= i %>">4</label>
-						<input class="choice" type="radio" name="criteria-<%= j %>-choice-<%= i %>" value="5" id="5-criteria-<%= j %>-choice-<%= i %>" >
-						<label for="5-criteria-<%= j %>-choice-<%= i %>">5</label>
-					</nav>
-				</td>
+				<td class="disabled first-col"><p class="input-allowed choice" id="choice-<%= choice.id %>"><%= choice.title %> <i class="fa fa-edit"></i></p><i class="fa fa-trash-o trash-button"></i></td>
+				<% for(var j = 0; j < decision.priorities.length; j++ ){
+					var priority = decision.priorities[j]; %>
+					<td class="result">
+						<p class="p-result" data-choice="<%= choice.id %>" data-criteria="<%= priority.id %>" id="criteria-<%= priority.id %>-result-choice-<%= choice.id %>"></p>
+						<nav class="rank" data-choice="<%= choice.id %>" data-criteria="<%= priority.id %>">
+							<input class="choice" type="radio" name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="1" id="1-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] === 1) ? 'checked' : ''; %>>
+							<label for="1-criteria-<%= priority.id %>-choice-<%= choice.id %>">1</label>
+							<input class="choice" type="radio" name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="2" id="2-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] === 2) ? 'checked' : ''; %>>
+							<label for="2-criteria-<%= priority.id %>-choice-<%= choice.id %>">2</label>
+							<input class="choice" type="radio" name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="3" id="3-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] === 3) ? 'checked' : ''; %>>
+							<label for="3-criteria-<%= priority.id %>-choice-<%= choice.id %>">3</label>
+							<input class="choice" type="radio" name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="4" id="4-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] === 4) ? 'checked' : ''; %>>
+							<label for="4-criteria-<%= priority.id %>-choice-<%= choice.id %>">4</label>
+							<input class="choice" type="radio" name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="5" id="5-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] === 5) ? 'checked' : ''; %>>
+							<label for="5-criteria-<%= priority.id %>-choice-<%= choice.id %>">5</label>
+						</nav>
+					</td>
 				<% } %>
-				<td class="disabled"><p class="decision p-result" id="decision-calc-<%= i %>" data-choice="<%= i %>">15</p></td>
+				<td class="disabled"><p class="decision p-result" id="decision-calc-<%= choice.id %>" data-choice="<%= choice.id %>"></p></td>
 			</tr>
 		<% } %>
-			<tr><td class="disabled" id="new-row"></td><td></td><td></td><td></td><td></td><td class="disabled"></td></tr>
+			<tr>
+				<td class="disabled" id="new-row"></td>
+			<% for (var i =0; i < decision.priorities.length; i ++) { %>
+				<td></td>
+			<% } %>
+				<td class="disabled"></td>
+			</tr>
 		</tbody>
 	</table>
 	<div class="large-numbers-description">
 		<nav class="large-numbers-button">
 			<span>Large Numbers are</span>
-			<input type="radio" name="large-num" value="good" id="large-good" checked>
+			<input type="radio" name="large-num" value="good" id="large-good" <%= (decision.largeNumbers ==='good') ? 'checked' : ''; %>>
 			<label for="large-good" class="first">Good</label>
-			<input type="radio" name="large-num" value="bad" id="large-bad">
+			<input type="radio" name="large-num" value="bad" id="large-bad" <%= (decision.largeNumbers ==='good') ? '' : 'checked' ; %>>
 			<label for="large-bad">Bad</label>
 		</nav>
 		<div class="large-numbers-result">
-			<p class="large-result" id="large-result-good">High Ratings</p>
-			<p class="large-result hide-opacity" id="large-result-bad">High Costs</p>
+			<p class="large-result <%= (decision.largeNumbers ==='good') ? '' : 'hide-opacity'; %>" id="large-result-good">High Ratings</p>
+			<p class="large-result <%= (decision.largeNumbers ==='good') ? 'hide-opacity' : ''; %>" id="large-result-bad">High Costs</p>
 		</div>
-	</div>
+	</div> 
+
 	<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
 	<script type="text/javascript" src="/javascripts/colresizable-1.6.min.js"></script>
 

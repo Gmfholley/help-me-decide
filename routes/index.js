@@ -22,22 +22,29 @@ router.get('/', function(req, res, next) {
 
 router.get('/:hash', function(req, res, next){
 
-
+	console.log(req.params.hash);
 	// create new request
 	request.get(config.apiUrl + '/decisions/' + req.params.hash, function(error, response){
-
 		var body = JSON.parse(response.body);
 
-        if (error || !body.token) {
+        if (error || !body) {
             return res.send({ error: 'An error occurred' });
         }
        
-        res.render{
-        	"title": 
-        }
-	});
+		  res.cookie('token', req.session.token);
+		  res.render('index', { 
+		    title: "Decision Maker",
+		    subtitle: "What should I do?",
+		    rankRange: 5,
+		    numCriteria: 4,
+		    numColors: 5,
+		    choices: ["Choice 1", "Choice 2", "Choice 3"],
+		    criteria: ["Cost", "Resources", "Customer Pain", "Urgency", "Buy-In", "Effect on Other Systems", "Difficulty", "Time", "Root Causes Addressed", "Extent Resolved", "Return on Investment", "Safety", "Training", "Team Control", "Cost to Maintain"],
+		    largeNumbers: "good"
+		    });
 
-})
+	});
+});
 
 module.exports = router;
 /*{

@@ -31,7 +31,6 @@ function authenticateDecision(req, res) {
 }
 
 function newDecision(req, res) {
-    console.log('yes');
     var newHash = randomstring.generate({
         charset: 'alphanumeric',
         capitalization: 'lowercase'
@@ -48,8 +47,9 @@ function newDecision(req, res) {
 }
 
 function findDecision(req, res) {
-    decisionService.findByHash(req.params.hash)
+    decisionService.findByAttributes({hash: req.params.hash})
         .then(function (decision) {
+
             if (decision) {
                 res.send(decision);
             } else {

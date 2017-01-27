@@ -3,32 +3,14 @@ var express = require('express');
 var router = express.Router();
 var randomstring = require('randomstring');
 var decisionService = require('../../services/decision');
+var jwt = require('jsonwebtoken');
 
 // routes
-router.post('/authenticate', authenticateDecision);
 router.get('/new', newDecision);
 router.get('/:hash', findDecision);
 router.put('/:hash', updateDecision);
 
 
-
-
-function authenticateDecision(req, res) {
-    var tryId = jwt.verify(req.token, config.secret);
-
-
-    decisionService.authenticate(req.body.hash, tryId)
-        .then(function (token) {
-            if (token) {
-                res.send({ token: token });
-            } else {
-                res.status(401).send('You are not authorized to change that decision');
-            }
-        })
-        .catch(function (err) {
-            res.status(400).send(err);
-        });
-}
 
 function newDecision(req, res) {
     var newHash = randomstring.generate({
@@ -62,10 +44,10 @@ function findDecision(req, res) {
 }
 
 function updateDecision(req, res) {
-    var decisionId = req.decision.sub;
+    var decisionId = jwt.verify(req.headers.authorization, config.secret);
 
-    if (req.params._id !== decisionId) {
-        return res.status(401).send('You can only update your own decisions');
+    if (! decisionId) {
+        return res.status(401).send('You do not have permission to update the decision');
     }
 
     decisionService.update(decisionId, req.body)

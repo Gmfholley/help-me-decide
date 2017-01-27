@@ -7,29 +7,12 @@ db.bind('decisions');
 
 var service = {};
 
-service.authenticate = authenticate;
-service.find = find;
+service.find = findById;
 service.findByAttributes = findByAttributes;
 service.create = create;
 service.update = update;
 service.delete = _delete;
 
-function authenticate(hash, _id) {
-    var deferred = Q.defer();
-
-    db.decisions.findById(_id, function (err, decision) {
-        if (err) deferred.reject(err.name + ': ' + err.message);
-
-        // no log in - authentication === encrypted id 
-        if (decision && (decision.id == _id) ) {
-            deferred.resolve(jwt.sign({ sub: decision._id }, config.secret));
-        } else {
-            deferred.resolve();
-        }
-    });
-
-    return deferred.promise;
-}
 
 function findByAttributes(attributes) {
     var deferred = Q.defer();
@@ -37,7 +20,6 @@ function findByAttributes(attributes) {
     db.decisions.findOne(
         attributes, 
         function (err, decision) {
-            console.log();
         if (err) deferred.reject(err.name + ': ' + err.message);
 
         if (decision) {
@@ -51,10 +33,10 @@ function findByAttributes(attributes) {
     return deferred.promise;
 }
 
-function find(_id) {
+function findById(_id) {
     var deferred = Q.defer();
 
-    db.decisions.findById(_id, function (err, decision) {
+    db.decisions.find(_id, function (err, decision) {
         if (err) deferred.reject(err.name + ': ' + err.message);
 
         if (decision) {
@@ -89,7 +71,8 @@ function create(decisionParam) {
             function (err, doc) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 // send back with the encrypted id -- this is only validation
-                deferred.resolve(jwt.sign({ sub: doc._id }, config.secret));
+                var docId = doc.ops[0]._id;
+                deferred.resolve(jwt.sign({ id: docId }, config.secret));
             });
     }
 

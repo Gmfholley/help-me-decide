@@ -5,7 +5,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('./config.json');
 var session = require('express-session');
-var expressJwt = require('express-jwt');
 
 
 var index = require('./routes/index');
@@ -25,10 +24,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.use('/', index);
-app.use('/api/decisions/authenticate', require('./routes/api/decision'));
+
 app.use('/api/decisions', require('./routes/api/decision'));
-app.use('/api/decisions/new', require('./routes/api/decision'));
-app.use('/api/decisions/:hash', require('./routes/api/decision'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

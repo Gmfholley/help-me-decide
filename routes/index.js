@@ -16,13 +16,11 @@ router.get('/', function(req, res, next) {
         // since this is a new request, save the owner token in the session to give to the client
         req.session.token = body.token;
 
-        res.redirect('/' + body.hash);
+        res.redirect('http://localhost:3000/' + body.hash);
 	});
 });
 
 router.get('/:hash', function(req, res, next){
-
-	console.log(req.params.hash);
 	// create new request
 	request.get(config.apiUrl + '/decisions/' + req.params.hash, function(error, response){
 		var body = JSON.parse(response.body);
@@ -39,11 +37,12 @@ router.get('/:hash', function(req, res, next){
 		// body.criteria[2].parentId = "priority-2";
 		// body.criteria[3].parentId = "priority-4";
        //
-		  res.cookie('token', req.session.token);
+		  res.cookie('token', req.session.token  || '');
 		  res.render('index', { decision: body, numColors: 5});
 
 	});
 });
+
 
 module.exports = router;
 /*{

@@ -190,19 +190,20 @@
 			    }
 
 			    
-
+			    // use innerHTML for criteria because if it is hidden by css, it will be ''
+			    // use innerText for choice because it has font awesome icons in
 			    decision.title = $('#title').text();
 			    decision.subtitle = $('#subtitle').text();
 			    decision.largeNumbers = $('.large-numbers-button input:checked').val();
 			    var choices = getJSONOfAttributes('.choice', ['innerText', 'choice']);
-			    var criteria = getJSONOfAttributes('.criteria:not(.new-criteria)', ['innerText', 'criteria', 'color']);
-			    var priorities = getJSONOfAttributes('.percent', ['innerText', 'priority']);
+			    var criteria = getJSONOfAttributes('.criteria:not(.new-criteria)', ['innerHTML', 'criteria', 'color']);
+			    var priorities = getJSONOfAttributes('.percent', ['innerHTML', 'priority']);
 			    var ranks = getJSONOfAttributes('.rank-choice:checked', ['value', 'choice']);
-			    priorities = changeAllAttributes(priorities, 'innerText', 'columnWidth');
+			    priorities = changeAllAttributes(priorities, 'innerHTML', 'columnWidth');
 			    priorities = changeAllAttributes(priorities, 'priority', 'id');
 			    choices = changeAllAttributes(choices, 'innerText', 'title');
 			    choices = changeAllAttributes(choices, 'choice', 'id');
-			    criteria = changeAllAttributes(criteria, 'innerText', 'title');
+			    criteria = changeAllAttributes(criteria, 'innerHTML', 'title');
 			    criteria = changeAllAttributes(criteria, 'criteria', 'id');
 
 

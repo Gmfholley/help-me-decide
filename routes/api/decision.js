@@ -44,7 +44,7 @@ function findDecision(req, res) {
 }
 
 function updateDecision(req, res) {
-    var decisionId = jwt.verify(req.headers.authorization, config.secret);
+    var decisionId = jwt.verify(req.headers.authorization, config.secret).id;
 
     if (! decisionId) {
         return res.status(401).send('You do not have permission to update the decision');

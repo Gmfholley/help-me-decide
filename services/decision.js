@@ -89,14 +89,15 @@ function update(_id, decisionParam) {
     });
 
     function updatedecision() {
-
         var set = {
             title: decisionParam.title,
             subtitle: decisionParam.subtitle,
-            criterias: decisionParam.criterias,
+            largeNumbers: decisionParam.largeNumbers,
+            choices: decisionParam.choices,
             priorities: decisionParam.priorities,
-            choices: decisionParam.choices
+            criteria: decisionParam.criteria
         };
+
 
         db.decisions.update(
             { _id: mongo.helper.toObjectID(_id) },
@@ -149,6 +150,7 @@ function defaultDecision(decision){
             choice.id = i + 1;
             var ranks = [];
             for(var j = 0; j < numCriteria; j ++){
+                var temp = {j: 1}
                 ranks.push(1);
             }
             choice.ranks = ranks;

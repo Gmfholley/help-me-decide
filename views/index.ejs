@@ -41,9 +41,9 @@
 						var child = decision.criteria.find(critChild);
 
 					%>
-					<th class="computed-width priority <%= (child) ? 'color-' + child.color : 'empty '; %>" id="priority-<%= priority.id %>">
+					<th class="computed-width priority <%= (child) ? 'color-' + child.color : 'empty '; %>" id="priority-<%= priority.id %>" <%= (child) ? 'data-color=color-' + child.color : ''; %>>
 						<% if (child) { %>
-						<div class="criteria color-<%= child.color %>" id="criteria-<%= child.id %>" draggable="true" data-color="<%= crit-color %>" data-criteria="<%= child.id %>"><%= child.title %></div>
+						<div class="criteria color-<%= child.color %>" id="criteria-<%= child.id %>" draggable="true" data-color="<%= child.color %>" data-criteria="<%= child.id %>"><%= child.title %></div>
 						<% } %>
 						<p class="percent" data-priority="<%= priority.id %>"><%= priority.columnWidth %>%</p> 
 					</th>
@@ -62,15 +62,15 @@
 					<td class="result">
 						<p class="p-result" data-choice="<%= choice.id %>" data-criteria="<%= priority.id %>" id="criteria-<%= priority.id %>-result-choice-<%= choice.id %>"></p>
 						<nav class="rank" data-choice="<%= choice.id %>" data-criteria="<%= priority.id %>">
-							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>" name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="1" id="1-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] === 1) ? 'checked' : ''; %>>
+							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>" name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="1" id="1-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 1) ? 'checked' : ''; %>>
 							<label for="1-criteria-<%= priority.id %>-choice-<%= choice.id %>">1</label>
-							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="2" id="2-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] === 2) ? 'checked' : ''; %>>
+							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="2" id="2-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 2) ? 'checked' : ''; %>>
 							<label for="2-criteria-<%= priority.id %>-choice-<%= choice.id %>">2</label>
-							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="3" id="3-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] === 3) ? 'checked' : ''; %>>
+							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="3" id="3-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 3) ? 'checked' : ''; %>>
 							<label for="3-criteria-<%= priority.id %>-choice-<%= choice.id %>">3</label>
-							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="4" id="4-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] === 4) ? 'checked' : ''; %>>
+							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="4" id="4-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 4) ? 'checked' : ''; %>>
 							<label for="4-criteria-<%= priority.id %>-choice-<%= choice.id %>">4</label>
-							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="5" id="5-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] === 5) ? 'checked' : ''; %>>
+							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="5" id="5-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 5) ? 'checked' : ''; %>>
 							<label for="5-criteria-<%= priority.id %>-choice-<%= choice.id %>">5</label>
 						</nav>
 					</td>
@@ -124,7 +124,7 @@
 				
 				var valueChecked = parseInt(square.children('.rank').children('input:checked').val());
 				square.children('.p-result')[0].innerText = Math.round(square.width() / width * 100 * valueChecked);
-				var choice = square.children('.p-result').data('choice');
+				var choice = square.children('.p-result').attr('data-choice');
 				var totalRow = 0;
 				$('.p-result:not(.decision)[data-choice=' + choice + ']').each(function(){
 					totalRow = parseInt(this.innerText) + totalRow;
@@ -195,10 +195,9 @@
 			    decision.subtitle = $('#subtitle').text();
 			    decision.largeNumbers = $('.large-numbers-button input:checked').val();
 			    var choices = getJSONOfAttributes('.choice', ['innerText', 'choice']);
-			    var criteria = getJSONOfAttributes('.criteria', ['innerText', 'criteria', 'color']);
+			    var criteria = getJSONOfAttributes('.criteria:not(.new-criteria)', ['innerText', 'criteria', 'color']);
 			    var priorities = getJSONOfAttributes('.percent', ['innerText', 'priority']);
 			    var ranks = getJSONOfAttributes('.rank-choice:checked', ['value', 'choice']);
-			    
 			    priorities = changeAllAttributes(priorities, 'innerText', 'columnWidth');
 			    priorities = changeAllAttributes(priorities, 'priority', 'id');
 			    choices = changeAllAttributes(choices, 'innerText', 'title');
@@ -209,8 +208,10 @@
 
 			    for (var i = 0; i < choices.length; i ++){
 			    	var thisRank = filterByAttr(ranks, 'choice', choices[i].id);
-			    	choices[i].ranks = []
+			    	choices[i].ranks = [];
+			    	var temp = {};
 			    	for (var j = 0; j < thisRank.length; j ++){
+			    		temp[j] = thisRank[j].value;
 			    		choices[i].ranks.push(thisRank[j].value);
 			    	}
 			    }
@@ -221,7 +222,7 @@
 
 			    decision.choices = choices;
 			    decision.criteria = criteria;
-			    decision.priorites = priorities;
+			    decision.priorities = priorities;
 			    return decision;
 			}
 
@@ -230,12 +231,13 @@
 				var data = jsonifyDecison();
 				var hash = window.location.pathname.substring(1, window.location.pathname.length);
 				var token = localStorage.getItem(hash);
+				console.log(JSON.stringify(data));
 				if (token) {
 					$.ajax({
 						url: putUrl,
 						method: 'put',
-						data: data,
-						dataType: 'json',
+						data: JSON.stringify(data),
+						contentType: 'application/json',
 						headers: {
 							"Authorization": token
 						}
@@ -257,7 +259,6 @@
 					}
 					if ($(this).attr('data-choice') ) {
 						$(this).attr('data-choice', newChoice);
-						$(this).data('choice', newChoice);
 					}
 					if ($(this).attr('for') ) {
 						var prevFor = $(this).attr('for');
@@ -273,10 +274,9 @@
 				}
 
 				$('.trash-button').removeClass('disable');
-				var newChoice = parseInt($('.choice-row').last().data('choice')) + 1;
+				var newChoice = parseInt($('.choice-row').last().attr('data-choice')) + 1;
 				var newRow = $('.choice-row').last().clone().insertAfter($('.choice-row').last());
 				newRow.attr('data-choice', newChoice);
-				newRow.data('choice', newChoice);
 				if (newRow.children().length > 0 ) {
 					newRow.children().each(setChildren);
 				}
@@ -361,7 +361,7 @@
 			}
 
 			var newcriteria = function(e){
-		        var lastId = $('.criteria:not(.new-criteria)').length;
+		        var lastId = $('.criteria:not(.new-criteria)').length + 1;
 		        var newLastId = 'criteria-' + lastId;
 				$('<input class="criteria color-1" id="' + newLastId + '"></>')
 					.insertBefore(e.target)
@@ -375,6 +375,8 @@
 				        		.on("touchmove", handleTouch)
 				        		.on("touchend", handleTouch)
 				        		.on("touchcancel", handleTouch)
+				        		.attr('data-color', 1)
+				        		.attr('data-criteria', lastId)
 				        		[0].innerText = newDec;
 					        $(e.target).remove();
 					    }
@@ -385,19 +387,20 @@
 			var cycleColor = function(e) {
 				var numColors = <%= numColors %>;
 				var element = $(e.currentTarget);
-				var currentColor = element.data("color");
+				var currentColor = parseInt(element.attr("data-color"));
 				if (currentColor === numColors){
 					var newColor = 1
 				} else {
 					var newColor = currentColor + 1;
 				}
+				console.log('color-'+String(currentColor));
 				element.removeClass('color-'+String(currentColor))
 						.addClass('color-' + String(newColor))
-						.data('color', newColor);
-				if (element.parent().data('color')) {
+						.attr('data-color', newColor);
+				if (element.parent().attr('data-color')) {
 					element.parent().removeClass('color-' + String(currentColor))
 						.addClass("color-" + String(newColor))
-						.data('color', newColor);
+						.attr('data-color', newColor);
 				}
 			}
 
@@ -489,21 +492,21 @@
 					var dragged = $('#' + data);
 					//if being dragged from one column to another
 					if (dragged.parent('priority')){
-						var currentColor = dragged.data('color');						
+						var currentColor = dragged.attr('data-color');						
 						dragged.parent().addClass('empty')
 							.removeClass('color-' + currentColor)
 							.removeData('color');
 					}
 					dragged.insertBefore(mydiv.children());
 					mydiv.removeClass('empty');
-					var currentColor = dragged.data('color');
+					var currentColor = dragged.attr('data-color');
 					mydiv.addClass('color-' + currentColor)
-						.data('color', currentColor);
+						.attr('data-color', currentColor);
 				// if being dragged back to the pool of all criterias
 				} else if (mydiv.hasClass('all-criterias')) {
 					var dragged = $('#' + data);
 					if (dragged.parent().hasClass('priority')) {
-						var currentColor = dragged.data('color');
+						var currentColor = dragged.attr('data-color');
 						dragged.parent().addClass('empty')
 							.removeClass('color-' + currentColor)
 							.removeData('color');

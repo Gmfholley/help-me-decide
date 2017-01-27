@@ -28,6 +28,9 @@ router.get('/:hash', function(req, res, next){
         if (error || !body) {
             return res.send({ error: 'An error occurred' });
         }
+        console.log(body);
+        console.log(body.choices[0]);
+        console.log(body.choices[0].ranks[0])
 		// test params
 		// body.title = "my test";
 		// body.subtitle="my test title";

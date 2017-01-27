@@ -55,7 +55,7 @@ table, th, td {
 .new-criteria {
 	border: 1px #ababab solid;
 }
-.choice {
+.choice, .rank-choice {
 	margin-left: 5px;
 	margin-right: 5px;
 	font-size: 16px;
@@ -150,26 +150,18 @@ table, th, td {
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -o-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -khtml-border-radius: 4px;
-  border-radius: 4px;
-  text-shadow: white;
-  background-color: #cdcdcd;
-  color: white;
+  margin-right: -5px;
   padding: 5px 24px;
-  padding-bottom: 3px;
-  font-size: 12px;
-  cursor: pointer;
   -moz-border-radius: 0px;
   -webkit-border-radius: 0px;
   -o-border-radius: 0px;
   -ms-border-radius: 0px;
   -khtml-border-radius: 0px;
   border-radius: 0px;
-  margin-right: -5px;
+  background-color: #cdcdcd;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
 }
 .rank label {
   display: -moz-inline-box;
@@ -177,26 +169,18 @@ table, th, td {
   display: inline-block;
   vertical-align: middle;
   *vertical-align: auto;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -o-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -khtml-border-radius: 4px;
-  border-radius: 4px;
-  text-shadow: white;
-  background-color: #dedede;
-  color: white;
+  margin-right: -5px;
   padding: 5px 10px;
-  padding-bottom: 3px;
-  font-size: 12px;
-  cursor: pointer;
   -moz-border-radius: 0px;
   -webkit-border-radius: 0px;
   -o-border-radius: 0px;
   -ms-border-radius: 0px;
   -khtml-border-radius: 0px;
   border-radius: 0px;
-  margin-right: -5px;
+  background-color: #dedede;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .large-numbers-button label, .rank label {
@@ -205,7 +189,8 @@ table, th, td {
 .large-numbers-button label:hover, .rank label:hover {
   background-color: #bcb;
 }
-.large-numbers-button label:active, .large-numbers-button label.active, .ranklabel:active, .rank label.active  {
+.large-numbers-button label:active, .large-numbers-button label.active, .ranklabel:active, .rank label.active, 
+#save-button:hover, #save-button:focus, #save-button:active  {
   background-color: #bcb;
 }
 .large-numbers-button label:first-of-type, .rank label:first-of-type {
@@ -241,6 +226,7 @@ table, th, td {
 }
 .large-numbers-result {
 	position:relative;
+  height: 3em;
 }
 .large-result {
 	position:absolute;
@@ -251,6 +237,26 @@ table, th, td {
 }
 .large-result.hide-opacity {
 	opacity: 0;
+}
+#save-button{
+  display: -moz-inline-box;
+  -moz-box-orient: vertical;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  margin-right: -5px;
+  padding: 5px 10px;
+  border: none;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -o-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  background-color: #dedede;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 @media(max-width: 600px){

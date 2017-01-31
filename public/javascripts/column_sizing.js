@@ -42,6 +42,7 @@
 
 			// Sets widths based on .percent innerHTML
 			var setWidths = function(){
+				$('#choice-heading, #final-heading').width('40');
 				// cannot trust that sum of all columns = width of table due to margin, border, and browser overflow rules
 				width = totalWidth();
 
@@ -71,26 +72,29 @@
 				calculateAllRanks();
 			};
 			
-			// initialize column Resizable
-			$("#decision-maker").colResizable({
-				resizeMode:'fit',
-				liveDrag:true,
-				postbackSafe:true,
-				partialRefresh:true,
-				draggingClass:"dragging",
-				onResize: onSampleResized,
-				disabledColumns: [0],
-				onDrag: onSampleResized
-			});
+
 
 
 			$(document).ready(function(){
+							// initialize column Resizable
+
 				// compute initial column widths
 				setWidths();
 				calculateAllRanks();
 				
 				$('input[type=radio].rank-choice').change(calculateRank);
-	
+				
+				// set initial widths before setting this to column resizer
+				$("#decision-maker").colResizable({
+					resizeMode:'fit',
+					liveDrag:true,
+					postbackSafe:true,
+					partialRefresh:true,
+					draggingClass: 'dragging',
+					onResize: onSampleResized,
+					disabledColumns: [0],
+					onDrag: onSampleResized
+				});
 
 			});
 

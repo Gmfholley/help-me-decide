@@ -6,6 +6,7 @@
 				else {
 					$('#save-button').css('display', 'none');
 					$('.input-allowed .fa.fa-edit').css('display', 'none');
+					$('.input-allowed').off('click');
 					$('.all-criterias').addClass('hide');
 					$('.trash-button').css('display', 'none');
 					$('#new-row').parent('tr').css('display', 'none');

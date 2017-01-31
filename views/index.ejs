@@ -56,7 +56,7 @@
 			var choice = decision.choices[i];
 		 %>
 			<tr class="choice-row" data-choice="<%= choice.id %>">
-				<td class="disabled first-col"><p class="input-allowed choice" id="choice-<%= choice.id %>" data-choice="<%= choice.id %>"><%= choice.title %> <i class="fa fa-edit"></i></p><i class="fa fa-trash-o trash-button"></i></td>
+				<td class="disabled first-col" ><p class="input-allowed choice" id="choice-<%= choice.id %>" data-choice="<%= choice.id %>"><%= choice.title %> <i class="fa fa-edit"></i></p><i class="fa fa-trash-o trash-button"></i></td>
 				<% for(var j = 0; j < decision.priorities.length; j++ ){
 					var priority = decision.priorities[j]; %>
 					<td class="result">

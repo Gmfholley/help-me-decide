@@ -73,7 +73,7 @@
 			}
 
 
-			// defaults
+			// default Options
 
 			var def = {
 				inputElement: 'input',
@@ -103,11 +103,13 @@
 
 
 			$.fn.quickedit = function(type, options={}, callback){
-
-				var inputOptions = $.extend(def, options);
+				// don't overwrite def
+				var inputOptions = $.extend({}, def, options);
 
 			
-				var insertElement = rawInputHtml(inputOptions.inputElement, inputOptions.inputClass, inputOptions.inputType, inputOptions.inputList);
+				var insertElement = rawInputHtml(inputOptions.inputElement, 
+					inputOptions.inputClass, inputOptions.inputType, 
+					inputOptions.inputList);
 
 
 				this.on(type, function(e){
@@ -164,7 +166,7 @@
 
 (function(){
 	$(document).ready(function(){
-			
+
 		$('.input-allowed').quickedit("click", {selector: '.input-allowed', appendHTML: '<i class="fa fa-edit"></i>', inputElement: 'input', inputType: 'text'});
 	});
 })(jQuery);

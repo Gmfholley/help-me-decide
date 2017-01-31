@@ -177,7 +177,7 @@ function defaultDecision(decision){
         for (var i = 0; i < numCriteria; i ++){
             var priority = {};
             priority.id = i + 1;
-            priority.columnWidth = parseInt(1 / numCriteria * 100);
+            priority.columnWidth = String(parseInt(1 / numCriteria * 100)) + '%';
             priorities.push(priority);
         }
         return priorities;

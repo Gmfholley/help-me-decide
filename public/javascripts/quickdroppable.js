@@ -55,6 +55,7 @@
 				simulatedMouse.initMouseEvent(type, true, true, window, 
 					1, touch.screenX, touch.screenY, touch.clientX, touch.clientY,
 					false, false, false, false, 0, null);
+				
 				dispatchTarget.dispatchEvent(simulatedMouse);
 
 			}
@@ -90,7 +91,7 @@
 			}
 
 
-	
+			// defaultOptions
 
 			var def = {
 				dragAssure: '',
@@ -105,8 +106,8 @@
 
 			$.fn.quickdroppable = function(type, options={}, callback){
 				
-
-				var dropOptions = $.extend(def, options);
+				// don't overwrite def
+				var dropOptions = $.extend({}, def, options);
 
 
 				var dragStart = function(event) {
@@ -201,31 +202,41 @@
 				
 				// make all criterias draggable
 				$('.criteria:not(.new-criteria').quickdroppable('draggable', {
-					dragAssure: '.criteria'
+					dragAssure: '.criteria',
+				});
+
+				$('.priority').quickdroppable('droppable', {
+					dropAssure: '.priority',
+					dropCondition: '.empty',
+					dropRemoveClass: 'empty',
+
+				}, function(event, dropTarget, dragged, dropOptions){
+					// add color class to priority column
+					var currentColor = dragged.attr('data-color');
+					
+					if (dropTarget.is('.empty')){
+						dropTarget
+							.addClass('color-' + currentColor)
+							.attr('data-color', currentColor);
+						if (dragged.parent().is('.priority')) {
+							dragged.parent()
+								.addClass('empty')
+								.removeClass('color-' + currentColor)
+								.removeData('color');
+						}
+					}
 				});
 
 
-
-				$('.priority, .all-criterias').quickdroppable('droppable', {
-					dropAssure: '.priority, .all-criterias',
-					dropCondition: '.all-criterias, .priority.empty',
-					dropRemoveClass: 'empty',
+				$('.all-criterias').quickdroppable('droppable', {
+					dropAssure: '.all-criterias',
+					insertBefore: '.new-criteria'
 				}, function(event, dropTarget, dragged, dropOptions){
-					dropOptions.insertBefore= '';
-
-
 					// add color class to priority column
 					var currentColor = dragged.attr('data-color');
 
-					if (dropTarget.is('.all-criterias')){
-						dropOptions.insertBefore = '.new-criteria';
-
-					} else if (dropTarget.is('.priority.empty')) {
-							dropTarget
-								.addClass('color-' + currentColor)
-								.attr('data-color', currentColor);
-					}
-					if (dragged.parent().is('.priority') && dropTarget.is('.all-criterias, .priority.empty')) {
+					
+					if (dragged.parent().is('.priority')) {
 						
 						dragged.parent()
 							.addClass('empty')

@@ -100,16 +100,22 @@
 			<p class="large-result <%= (decision.largeNumbers ==='good') ? 'hide-opacity' : ''; %>" id="large-result-bad">High Costs</p>
 		</div>
 	</div> 
-	<button class="button" id="save-button">Save</button>
+	<div id="modal">
+		<div class="modal__content">
+			<span class="close">X</span>
+			<h2>Sorry</h2> 
+			<h3>Your browser doesn't have the key to change this decision.</h1>
+		</div>
+	</div>
+	<button class="button" id="save-button">Save</button> <span class="save-success">Saved</span>
 	<script type="text/javascript" src="/vendors/jquery.min.js"></script>
 	<script type="text/javascript" src="/vendors/colresizable-1.6.min.js"></script>
-
-	<script type="text/javascript" src="/javascripts/quickedit.js"></script>
 	<script type="text/javascript" src="/javascripts/htmljsonify.js"></script>
+	<script type="text/javascript" src="/javascripts/post_decision.js"></script>
+	<script type="text/javascript" src="/javascripts/quickedit.js"></script>
 	<script type="text/javascript" src="/javascripts/quickdroppable.js"></script>
 	<script type="text/javascript" src="/javascripts/criteria.js"></script>
 	<script type="text/javascript" src="/javascripts/choice.js"></script>
-	<script type="text/javascript" src="/javascripts/post_decision.js"></script>
 	<script type="text/javascript" src="/javascripts/column_sizing.js"></script>
 	<script type="text/javascript" src="/javascripts/index.js"></script>
 	</body>

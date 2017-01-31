@@ -14,6 +14,5 @@
 				
 				$('.large-numbers-button label').click(toggleLargeNumbers);
 
-
 			});
 })(jQuery);

@@ -3,6 +3,13 @@
 				var hash = window.location.pathname.substring(1, window.location.pathname.length);
 				var token = document.cookie.substring(6, document.cookie.length);
 				if (token) { localStorage.setItem(hash, token); }
+				else {
+					$('#save-button').css('display', 'none');
+					$('.input-allowed .fa.fa-edit').css('display', 'none');
+					$('.all-criterias').addClass('hide');
+					$('.trash-button').css('display', 'none');
+					$('#new-row').parent('tr').css('display', 'none');
+				}
 			}
 
 			var jsonifyDecison = function(){
@@ -76,9 +83,38 @@
 
 
 					}).done(function(data){
+						var date = new Date();
+						$('.save-success')
+							.addClass('hide-opacity')
+							.text('Saved ' + date.toLocaleTimeString());
+						setTimeout(function() {
+							$('.save-success').removeClass('hide-opacity');
+						}, 30000);
+
+					}).fail(function(){
+						$('#modal').css('display', 'block');
+						$('.close').click(function(e){
+							$('#modal').css('display', 'none');
+						});
+						$('window').click(function(e){
+							if ($(event.target).is('#modal')) {
+								$('#modal').css('display', 'none');
+							}
+						});
+						$('#save-button').css('display', 'none');
 					});
 				} else {
-					alert("you are not authorized to save this");
+					$('#modal').css('display', 'block');
+					$('.close').click(function(e){
+						$('#modal').css('display', 'none');
+					});
+					window.onclick = function(e){
+						if ($(e.target).is('#modal')) {
+							$('#modal').css('display', 'none');
+						}
+					};
+					$('#save-button').css('display', 'none');
+
 				}
 			}
 			$(document).ready(function(){

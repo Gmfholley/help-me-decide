@@ -6,16 +6,15 @@
 * allows html5 draga nd drop interface with touch support
 *				type = 'draggable' or 'droppable'
 *				options = {
-				targetAssure: selector for target - might be parent of what was clicked,
-				dropCondition: selector for drop condition,
-				insertBefore: selector for insert of dragged into drop,
-				dragRemoveClass: class to add to drag/target element,
-				dragAddClass: class to remove from drag/target element,
-				dropRemoveClass: class to remove from drop element,
-				dropAddClass: class to add to drop element
+					targetAssure: selector for target - might be parent of what was clicked,
+					dropCondition: selector for drop condition,
+					insertBefore: selector for insert of dragged into drop,
+					dragRemoveClass: class to add to drag/target element,
+					dragAddClass: class to remove from drag/target element,
+					dropRemoveClass: class to remove from drop element,
+					dropAddClass: class to add to drop element
 				}
-				callbackTarget = will be executed on Target/Drag
-				callbackDrop = will be executed on Drop
+				callback = will be executed before drag/drop event finished
 
 */
 // TODO- need to make this work for select, checkbox,and radio buttons

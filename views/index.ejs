@@ -8,6 +8,14 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
 	<body>
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));</script>
 	<h1 class="input-allowed text-center" id="title"><%= decision.title %> <i class="fa fa-edit"></i></h1>
 	<p class="input-allowed text-center" id="subtitle"><%= decision.subtitle %> <i class="fa fa-edit"></i></p>
 
@@ -108,6 +116,9 @@
 		</div>
 	</div>
 	<button class="button" id="save-button">Save</button> <span class="save-success">Saved</span>
+	<a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-text="I made a decision! #DecisionMaker" data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+	<div class="fb-share-button" data-href="http://test.com" data-layout="button" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Ftest.com%2F&amp;src=sdkpreparse">Share</a></div>
+	<a href="mailto:?Subject=I%20Made%20a%20Decision%20with%20Decison%20Maker!" target="_top"><i class="fa fa-envelope-o fa-2x"></i></a>
 	<script type="text/javascript" src="/vendors/jquery.min.js"></script>
 	<script type="text/javascript" src="/vendors/colresizable-1.6.min.js"></script>
 	<script type="text/javascript" src="/javascripts/htmljsonify.js"></script>

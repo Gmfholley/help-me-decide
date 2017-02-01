@@ -3,6 +3,10 @@ body {
   font: 14px 'Source Sans Pro', sans-serif;
   box-sizing: border-box;
 }
+.content {
+  max-width: 960px;
+  margin: 0 auto;
+}
 table {
 	overflow-wrap: break-word;
 }
@@ -227,6 +231,7 @@ table, th, td {
 .large-numbers-result {
 	position:relative;
   height: 3em;
+  padding: 12px;
 }
 .large-result {
 	position:absolute;
@@ -319,6 +324,14 @@ table, th, td {
 @keyframes modalenter {
     from {top: -300px; opacity: 0}
     to {top: 0; opacity: 1}
+}
+
+.social-media {
+  text-align: center;
+}
+
+.social-media a {
+  margin: 5px;
 }
 
 @media(max-width: 600px){

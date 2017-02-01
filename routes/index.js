@@ -28,9 +28,7 @@ router.get('/:hash', function(req, res, next){
         if (error || !body) {
             return res.send({ error: 'An error occurred' });
         }
-        console.log(body);
-        console.log(body.choices[0]);
-        console.log(body.choices[0].ranks[0])
+        
 		// test params
 		// body.title = "my test";
 		// body.subtitle="my test title";
@@ -41,7 +39,7 @@ router.get('/:hash', function(req, res, next){
 		// body.criteria[3].parentId = "priority-4";
        //
 		  res.cookie('token', req.session.token  || '');
-		  res.render('index', { decision: body, numColors: 5});
+		  res.render('index', { decision: body, numColors: 5, page: req.get('host') + req.url});
 
 	});
 });

@@ -42,7 +42,8 @@
 
 			// Sets widths based on .percent innerHTML
 			var setWidths = function(){
-				$('#choice-heading, #final-heading').width('40');
+				var minWidth = Math.max(($(window).width() / 10), 40);
+				$('#choice-heading, #final-heading').width(minWidth);
 				// cannot trust that sum of all columns = width of table due to margin, border, and browser overflow rules
 				width = totalWidth();
 
@@ -88,8 +89,6 @@
 				$("#decision-maker").colResizable({
 					resizeMode:'fit',
 					liveDrag:true,
-					postbackSafe:true,
-					partialRefresh:true,
 					draggingClass: 'dragging',
 					onResize: onSampleResized,
 					disabledColumns: [0],

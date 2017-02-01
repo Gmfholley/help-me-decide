@@ -8,126 +8,125 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	</head>
 	<body>
-	<div id="fb-root"></div>
-	<script>(function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0];
-	  if (d.getElementById(id)) return;
-	  js = d.createElement(s); js.id = id;
-	  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
-	  fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
-	<h1 class="input-allowed text-center" id="title"><%= decision.title %> <i class="fa fa-edit"></i></h1>
-	<p class="input-allowed text-center" id="subtitle"><%= decision.subtitle %> <i class="fa fa-edit"></i></p>
+	<div class="content">
+		<h1 class="input-allowed text-center" id="title"><%= decision.title %> <i class="fa fa-edit"></i></h1>
+		<p class="input-allowed text-center" id="subtitle"><%= decision.subtitle %> <i class="fa fa-edit"></i></p>
 
 
-	<div class="all-criterias-show"></div>
-	<div class="all-criterias" id="criterias-pad">
-		<% 	for (var i = 0; i < decision.criteria.length; i ++ ){ %>
-			<% var crit = decision.criteria[i];
-			if (crit.parentId == 'criterias-pad'){
+		<div class="all-criterias-show"></div>
+		<div class="all-criterias" id="criterias-pad">
+			<% 	for (var i = 0; i < decision.criteria.length; i ++ ){ %>
+				<% var crit = decision.criteria[i];
+				if (crit.parentId == 'criterias-pad'){
+				 %>
+				<div class="criteria color-<%= crit.color %>" id="criteria-<%= crit.id %>" draggable="true" data-color="<%= crit.color %>" data-criteria="<%= crit.id %>"><%= crit.title %></div>
+
+				<% }
+			} %>
+			<div class="criteria new-criteria">+</div>
+		</div>	
+		<table id="decision-maker" width="100%">
+			<thead>
+				<tr>
+					<th class="disabled" id="choice-heading">Choices</th>
+					<% for(var j = 0; j < decision.priorities.length; j++ ){ 
+							var priority = decision.priorities[j];
+
+
+							var critChild = function(element) {
+								return element.parentId === 'priority-' + priority.id;
+							}
+
+
+
+							var child = decision.criteria.find(critChild);
+
+						%>
+						<th class="computed-width priority <%= (child) ? 'color-' + child.color : 'empty '; %>" id="priority-<%= priority.id %>" <%= (child) ? 'data-color=color-' + child.color : ''; %>>
+							<% if (child) { %>
+							<div class="criteria color-<%= child.color %>" id="criteria-<%= child.id %>" draggable="true" data-color="<%= child.color %>" data-criteria="<%= child.id %>"><%= child.title %></div>
+							<% } %>
+							<p class="percent" data-priority="<%= priority.id %>"><%= priority.columnWidth %></p> 
+						</th>
+					<% } %>
+					<th class="disabled" id="final-heading">Decision</th>
+				</tr>
+			</thead>
+			<tbody>
+			<% for (var i =0; i < decision.choices.length; i ++) {
+				var choice = decision.choices[i];
 			 %>
-			<div class="criteria color-<%= crit.color %>" id="criteria-<%= crit.id %>" draggable="true" data-color="<%= crit.color %>" data-criteria="<%= crit.id %>"><%= crit.title %></div>
-
-			<% }
-		} %>
-		<div class="criteria new-criteria">+</div>
-	</div>	
-	<table id="decision-maker" width="100%">
-		<thead>
-			<tr>
-				<th class="disabled" id="choice-heading">Choices</th>
-				<% for(var j = 0; j < decision.priorities.length; j++ ){ 
-						var priority = decision.priorities[j];
-
-
-						var critChild = function(element) {
-							return element.parentId === 'priority-' + priority.id;
-						}
-
-
-
-						var child = decision.criteria.find(critChild);
-
-					%>
-					<th class="computed-width priority <%= (child) ? 'color-' + child.color : 'empty '; %>" id="priority-<%= priority.id %>" <%= (child) ? 'data-color=color-' + child.color : ''; %>>
-						<% if (child) { %>
-						<div class="criteria color-<%= child.color %>" id="criteria-<%= child.id %>" draggable="true" data-color="<%= child.color %>" data-criteria="<%= child.id %>"><%= child.title %></div>
-						<% } %>
-						<p class="percent" data-priority="<%= priority.id %>"><%= priority.columnWidth %></p> 
-					</th>
-				<% } %>
-				<th class="disabled" id="final-heading">Decision</th>
-			</tr>
-		</thead>
-		<tbody>
-		<% for (var i =0; i < decision.choices.length; i ++) {
-			var choice = decision.choices[i];
-		 %>
-			<tr class="choice-row" data-choice="<%= choice.id %>">
-				<td class="disabled first-col" ><p class="input-allowed choice" id="choice-<%= choice.id %>" data-choice="<%= choice.id %>"><%= choice.title %> <i class="fa fa-edit"></i></p><i class="fa fa-trash-o trash-button"></i></td>
-				<% for(var j = 0; j < decision.priorities.length; j++ ){
-					var priority = decision.priorities[j]; %>
-					<td class="result">
-						<p class="p-result" data-choice="<%= choice.id %>" data-criteria="<%= priority.id %>" id="criteria-<%= priority.id %>-result-choice-<%= choice.id %>"></p>
-						<nav class="rank" data-choice="<%= choice.id %>" data-criteria="<%= priority.id %>">
-							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>" name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="1" id="1-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 1) ? 'checked' : ''; %>>
-							<label for="1-criteria-<%= priority.id %>-choice-<%= choice.id %>">1</label>
-							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="2" id="2-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 2) ? 'checked' : ''; %>>
-							<label for="2-criteria-<%= priority.id %>-choice-<%= choice.id %>">2</label>
-							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="3" id="3-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 3) ? 'checked' : ''; %>>
-							<label for="3-criteria-<%= priority.id %>-choice-<%= choice.id %>">3</label>
-							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="4" id="4-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 4) ? 'checked' : ''; %>>
-							<label for="4-criteria-<%= priority.id %>-choice-<%= choice.id %>">4</label>
-							<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="5" id="5-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 5) ? 'checked' : ''; %>>
-							<label for="5-criteria-<%= priority.id %>-choice-<%= choice.id %>">5</label>
-						</nav>
-					</td>
-				<% } %>
-				<td class="disabled"><p class="decision p-result" id="decision-calc-<%= choice.id %>" data-choice="<%= choice.id %>"></p></td>
-			</tr>
-		<% } %>
-			<tr>
-				<td class="disabled" id="new-row"></td>
-			<% for (var i =0; i < decision.priorities.length; i ++) { %>
-				<td></td>
+				<tr class="choice-row" data-choice="<%= choice.id %>">
+					<td class="disabled first-col" ><p class="input-allowed choice" id="choice-<%= choice.id %>" data-choice="<%= choice.id %>"><%= choice.title %> <i class="fa fa-edit"></i></p><i class="fa fa-trash-o trash-button"></i></td>
+					<% for(var j = 0; j < decision.priorities.length; j++ ){
+						var priority = decision.priorities[j]; %>
+						<td class="result">
+							<p class="p-result" data-choice="<%= choice.id %>" data-criteria="<%= priority.id %>" id="criteria-<%= priority.id %>-result-choice-<%= choice.id %>"></p>
+							<nav class="rank" data-choice="<%= choice.id %>" data-criteria="<%= priority.id %>">
+								<input class="rank-choice" type="radio" data-choice="<%= choice.id %>" name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="1" id="1-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 1) ? 'checked' : ''; %>>
+								<label for="1-criteria-<%= priority.id %>-choice-<%= choice.id %>">1</label>
+								<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="2" id="2-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 2) ? 'checked' : ''; %>>
+								<label for="2-criteria-<%= priority.id %>-choice-<%= choice.id %>">2</label>
+								<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="3" id="3-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 3) ? 'checked' : ''; %>>
+								<label for="3-criteria-<%= priority.id %>-choice-<%= choice.id %>">3</label>
+								<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="4" id="4-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 4) ? 'checked' : ''; %>>
+								<label for="4-criteria-<%= priority.id %>-choice-<%= choice.id %>">4</label>
+								<input class="rank-choice" type="radio" data-choice="<%= choice.id %>"name="criteria-<%= priority.id %>-choice-<%= choice.id %>" value="5" id="5-criteria-<%= priority.id %>-choice-<%= choice.id %>" <%= (choice.ranks[j] == 5) ? 'checked' : ''; %>>
+								<label for="5-criteria-<%= priority.id %>-choice-<%= choice.id %>">5</label>
+							</nav>
+						</td>
+					<% } %>
+					<td class="disabled"><p class="decision p-result" id="decision-calc-<%= choice.id %>" data-choice="<%= choice.id %>"></p></td>
+				</tr>
 			<% } %>
-				<td class="disabled"></td>
-			</tr>
-		</tbody>
-	</table>
-	<div class="large-numbers-description">
-		<nav class="large-numbers-button">
-			<span>Large Numbers are</span>
-			<input type="radio" name="large-num" value="good" id="large-good" <%= (decision.largeNumbers ==='good') ? 'checked' : ''; %>>
-			<label for="large-good" class="first">Good</label>
-			<input type="radio" name="large-num" value="bad" id="large-bad" <%= (decision.largeNumbers ==='good') ? '' : 'checked' ; %>>
-			<label for="large-bad">Bad</label>
-		</nav>
-		<div class="large-numbers-result">
-			<p class="large-result <%= (decision.largeNumbers ==='good') ? '' : 'hide-opacity'; %>" id="large-result-good">High Ratings</p>
-			<p class="large-result <%= (decision.largeNumbers ==='good') ? 'hide-opacity' : ''; %>" id="large-result-bad">High Costs</p>
+				<tr>
+					<td class="disabled" id="new-row"></td>
+				<% for (var i =0; i < decision.priorities.length; i ++) { %>
+					<td></td>
+				<% } %>
+					<td class="disabled"></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="large-numbers-description">
+			<nav class="large-numbers-button">
+				<span>Large Numbers are</span>
+				<input type="radio" name="large-num" value="good" id="large-good" <%= (decision.largeNumbers ==='good') ? 'checked' : ''; %>>
+				<label for="large-good" class="first">Good</label>
+				<input type="radio" name="large-num" value="bad" id="large-bad" <%= (decision.largeNumbers ==='good') ? '' : 'checked' ; %>>
+				<label for="large-bad">Bad</label>
+			</nav>
+			<div class="large-numbers-result">
+				<p class="large-result <%= (decision.largeNumbers ==='good') ? '' : 'hide-opacity'; %>" id="large-result-good">High Ratings</p>
+				<p class="large-result <%= (decision.largeNumbers ==='good') ? 'hide-opacity' : ''; %>" id="large-result-bad">High Costs</p>
+			</div>
+		</div> 
+		<div id="modal">
+			<div class="modal__content">
+				<span class="close">X</span>
+				<h2>Sorry</h2> 
+				<h3>Your browser doesn't have the key to change this decision.</h1>
+			</div>
 		</div>
-	</div> 
-	<div id="modal">
-		<div class="modal__content">
-			<span class="close">X</span>
-			<h2>Sorry</h2> 
-			<h3>Your browser doesn't have the key to change this decision.</h1>
+		<button class="button" id="save-button">Save</button> <span class="save-success">Saved</span>
+
+		<div class="social-media">
+			<a href=<%= "https://www.facebook.com/sharer/sharer.php?u=www." + page %> target="_blank"><i class="fa fa-facebook fa-2x"></i></a>
+
+			<a href=<%="https://twitter.com/home?status=I%20made%20a%20decision!%20%23DecisionMaker%20http://" + page %> target="_blank"><i class="fa fa-twitter fa-2x"></i></a>
+
+			<a href=<%= "mailto:?Subject=I%20Made%20a%20Decision%20with%20Decison%20Maker!&body=" + page %> target="_blank"><i class="fa fa-envelope-o fa-2x"></i></a>
 		</div>
 	</div>
-	<button class="button" id="save-button">Save</button> <span class="save-success">Saved</span>
-	<a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-text="I made a decision! #DecisionMaker" data-show-count="false">Tweet</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-	<div class="fb-share-button" data-href="http://test.com" data-layout="button" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Ftest.com%2F&amp;src=sdkpreparse">Share</a></div>
-	<a href="mailto:?Subject=I%20Made%20a%20Decision%20with%20Decison%20Maker!" target="_top"><i class="fa fa-envelope-o fa-2x"></i></a>
 	<script type="text/javascript" src="/vendors/jquery.min.js"></script>
 	<script type="text/javascript" src="/vendors/colresizable-1.6.min.js"></script>
 	<script type="text/javascript" src="/javascripts/htmljsonify.js"></script>
-	<script type="text/javascript" src="/javascripts/post_decision.js"></script>
 	<script type="text/javascript" src="/javascripts/quickedit.js"></script>
 	<script type="text/javascript" src="/javascripts/quickdroppable.js"></script>
 	<script type="text/javascript" src="/javascripts/criteria.js"></script>
 	<script type="text/javascript" src="/javascripts/choice.js"></script>
 	<script type="text/javascript" src="/javascripts/column_sizing.js"></script>
+	<script type="text/javascript" src="/javascripts/post_decision.js"></script>
 	<script type="text/javascript" src="/javascripts/index.js"></script>
 	</body>
 </html>

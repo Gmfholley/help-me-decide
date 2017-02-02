@@ -19,6 +19,7 @@
     "mongodb": "^2.2.21",
     "mongoskin": "^2.1.0",
     "morgan": "~1.7.0",
+    "node-env-file": "^0.1.8",
     "q": "^1.4.1",
     "randomstring": "^1.1.5",
     "request": "^2.79.0",

@@ -1,8 +1,7 @@
-var config = require('../config.json');
 var jwt = require('jsonwebtoken');
 var Q = require('q');
 var mongo = require('mongoskin');
-var db = mongo.db(config.connectionString, { native_parser: true });
+var db = mongo.db(process.env.CONNECTION_STRING, { native_parser: true });
 db.bind('decisions');
 
 var service = {};
@@ -72,7 +71,7 @@ function create(decisionParam) {
                 if (err) deferred.reject(err.name + ': ' + err.message);
                 // send back with the encrypted id -- this is only validation
                 var docId = doc.ops[0]._id;
-                deferred.resolve(jwt.sign({ id: docId }, config.secret));
+                deferred.resolve(jwt.sign({ id: docId }, process.env.SECRET));
             });
     }
 

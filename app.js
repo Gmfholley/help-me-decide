@@ -1,9 +1,9 @@
+var env = require('node-env-file');
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var config = require('./config.json');
 var session = require('express-session');
 
 
@@ -11,10 +11,13 @@ var index = require('./routes/index');
 
 var app = express();
 
+// Load any undefined ENV variables from a specified file.
+env(__dirname + '/.env');
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(session({ secret: config.secret, resave: false, saveUninitialized: true }));
+app.use(session({ secret: process.env.SECRET, resave: false, saveUninitialized: true }));
 
 app.use(logger('dev'));
 app.use(bodyParser.json());

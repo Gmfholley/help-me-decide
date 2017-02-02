@@ -1,12 +1,11 @@
 var express = require('express');
-var config = require('../config.json');
 var router = express.Router();
 var request = require('request');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	// create new request
-	request.get(config.apiUrl + '/decisions/new', function(error, response){
+	request.get(process.env.API_URL + '/decisions/new', function(error, response){
 
 		var body = JSON.parse(response.body);
 
@@ -22,7 +21,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/:hash', function(req, res, next){
 	// create new request
-	request.get(config.apiUrl + '/decisions/' + req.params.hash, function(error, response){
+	request.get(process.env.API_URL + '/decisions/' + req.params.hash, function(error, response){
 		var body = JSON.parse(response.body);
 
         if (error || !body) {

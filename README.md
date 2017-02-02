@@ -12,7 +12,7 @@ To run this locally, you need node, npm, and mongdb.
 ```
 	$ npm install
 ```
-4. Open `config.json` and change the `connectionString` to the database and add your own secret string for the server.  Then remove the `config.json` from your repo so others can't guess your secret.
+4. Create a .env file and set process.env.CONNECTION_STRING, process.env.SECRET, process.env.API_URL.
 
 
 5. Look up how to run a mongo server in your environment.  In a Mac environment, try running this in a new terminal windo:

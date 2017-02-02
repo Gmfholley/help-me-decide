@@ -1,4 +1,3 @@
-var config = require('../../config.json');
 var express = require('express');
 var router = express.Router();
 var randomstring = require('randomstring');
@@ -24,7 +23,7 @@ function newDecision(req, res) {
         })
         .catch(function (err) {
             // do again, requesting a hash that is not already taken
-            res.redirect(config.apiURL + '/decisions/new');
+            res.redirect(process.env.API_URL + '/decisions/new');
         });
 }
 
@@ -44,7 +43,7 @@ function findDecision(req, res) {
 }
 
 function updateDecision(req, res) {
-    var decisionId = jwt.verify(req.headers.authorization, config.secret).id;
+    var decisionId = jwt.verify(req.headers.authorization, process.env.SECRET).id;
 
     if (! decisionId) {
         return res.status(401).send('You do not have permission to update the decision');

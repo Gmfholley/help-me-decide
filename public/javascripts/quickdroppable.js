@@ -190,7 +190,7 @@
 						.on('touchstart', handleTouch)
 						.on('touchmove', handleTouch)
 						.on('touchend', handleTouch)
-						.on('touchcancel', handleTouch)
+						.on('touchcancel', handleTouch);
 				}
 			}
 

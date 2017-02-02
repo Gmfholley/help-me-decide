@@ -1,4 +1,4 @@
-var env = require('node-env-file');
+
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
@@ -11,8 +11,14 @@ var index = require('./routes/index');
 
 var app = express();
 
-// Load any undefined ENV variables from a specified file.
-env(__dirname + '/.env');
+
+app.configure('development', function(){
+	// Load any undefined ENV variables from a specified file.
+	var env = require('node-env-file');
+	env(__dirname + '/.env');
+});
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

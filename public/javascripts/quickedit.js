@@ -81,6 +81,7 @@
 				inputClass: 'input-class',
 				inputList: [],
 				inputStyle: {
+						"height": "20px",
 						"-webkit-appearance": "textfield", 
 						"user-select": "text", 
 						"cursor": "auto", 
@@ -103,6 +104,7 @@
 
 
 			$.fn.quickedit = function(type, options={}, callback){
+
 				// don't overwrite def
 				var inputOptions = $.extend({}, def, options);
 
@@ -113,7 +115,8 @@
 
 
 				this.on(type, function(e){
-
+					e.preventDefault();
+					e.stopPropagation();
 					var finishEdit = function(e) {
 						if (typeof callback === 'function') {
 							callback(input, inputOptions);

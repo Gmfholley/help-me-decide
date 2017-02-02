@@ -23,7 +23,7 @@ function newDecision(req, res) {
         })
         .catch(function (err) {
             // do again, requesting a hash that is not already taken
-            res.redirect(process.env.API_URL + '/decisions/new');
+            res.redirect(req.protocol + '://' + req.get('host') + process.env.API_URL + '/decisions/new');
         });
 }
 

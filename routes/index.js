@@ -5,7 +5,10 @@ var request = require('request');
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	// create new request
-	request.get(process.env.API_URL + '/decisions/new', function(error, response){
+	console.log(req.protocol + '://' + req.get('host') + process.env.API_URL + '/decisions/new');
+
+
+	request.get(req.protocol + '://' + req.get('host') + process.env.API_URL + '/decisions/new', function(error, response){
 
 		var body = JSON.parse(response.body);
 
@@ -15,13 +18,15 @@ router.get('/', function(req, res, next) {
         // since this is a new request, save the owner token in the session to give to the client
         req.session.token = body.token;
 
-        res.redirect('http://localhost:3000/' + body.hash);
+
+        console.log(req.protocol + '://' + req.get('host') + '/' + body.hash);
+        res.redirect(req.protocol + '://' + req.get('host') + '/' + body.hash);
 	});
 });
 
 router.get('/:hash', function(req, res, next){
 	// create new request
-	request.get(process.env.API_URL + '/decisions/' + req.params.hash, function(error, response){
+	request.get(req.protocol + '://' + req.get('host') + process.env.API_URL + '/decisions/' + req.params.hash, function(error, response){
 		var body = JSON.parse(response.body);
 
         if (error || !body) {
@@ -38,7 +43,7 @@ router.get('/:hash', function(req, res, next){
 		// body.criteria[3].parentId = "priority-4";
        //
 		  res.cookie('token', req.session.token  || '');
-		  res.render('index', { decision: body, numColors: 5, page: req.get('host') + req.url});
+		  res.render('index', { decision: body, numColors: 5, page: req.protocol + '://' + req.get('host') + req.url});
 
 	});
 });

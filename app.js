@@ -12,11 +12,12 @@ var index = require('./routes/index');
 var app = express();
 
 
-app.configure('development', function(){
+if ( app.get('env') === 'development' ) {
 	// Load any undefined ENV variables from a specified file.
 	var env = require('node-env-file');
 	env(__dirname + '/.env');
-});
+}
+
 
 
 

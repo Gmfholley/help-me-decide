@@ -32,7 +32,7 @@ table, th, td {
 .all-criterias {
 	margin: 0px 0px 5px 0px;
 	background-color: #efefef;
-	max-height: 400px;
+	max-height: 600px;
 	overflow: hidden;
 	-webkit-transition: height 1s; 
 	-moz-transition: max-height 1s; 

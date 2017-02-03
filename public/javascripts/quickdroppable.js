@@ -200,7 +200,7 @@
 			$(document).ready(function(){
 				
 				// make all criterias draggable
-				$('.criteria:not(.new-criteria').quickdroppable('draggable', {
+				$('.criteria:not(.new-criteria)').quickdroppable('draggable', {
 					dragAssure: '.criteria',
 				});
 

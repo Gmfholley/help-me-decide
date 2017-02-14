@@ -54,7 +54,7 @@ em.color{
   display: inline-block;
   width: 100%;
   padding: 40px 0px;
-  border-top: #aaa dotted 1px;
+  border-top: #FBCFFF solid 1px;
   clear: both;
 }
 .feature-img.full-size {

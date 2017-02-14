@@ -166,10 +166,3 @@
 				});
 			};
 })(jQuery);
-
-(function(){
-	$(document).ready(function(){
-
-		$('.input-allowed').quickedit("click", {selector: '.input-allowed', appendHTML: '<i class="fa fa-edit"></i>', inputElement: 'input', inputType: 'text'});
-	});
-})(jQuery);

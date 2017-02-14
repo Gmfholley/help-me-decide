@@ -43,7 +43,7 @@ router.get('/:hash', function(req, res, next){
 		// body.criteria[3].parentId = "priority-4";
        //
 		  res.cookie('token', req.session.token  || '');
-		  res.render('index', { decision: body, numColors: 5, page: req.protocol + '://' + req.get('host') + req.url});
+		  res.render('index', { decision: body, numColors: 5, page: req.protocol + '://' + req.get('host') + req.url, title: "Decision Maker"});
 
 	});
 });

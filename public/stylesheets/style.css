@@ -7,7 +7,7 @@ body {
   max-width: 960px;
   margin: 0 auto;
 }
-.nav-bar-list, #nav-logo-img {
+.nav-bar-list, #logo {
   vertical-align: middle;
 }
 .nav-bar-list {
@@ -34,7 +34,7 @@ body {
 }
 
 
-#nav-logo-img {
+#logo {
   max-width: 40px;
   margin: auto;
 }

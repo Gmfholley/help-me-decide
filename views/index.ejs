@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html>
-	<head>
-	<title><%= decision.title %></title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel='stylesheet' href='/stylesheets/style.css' />
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">	
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	</head>
-	<body>
+<% include partials/head %>
+
+	<% include partials/header %>
+	
 	<div class="content">
 		<h1 class="input-allowed text-center" id="title"><%= decision.title %> <i class="fa fa-edit"></i></h1>
 		<p class="input-allowed text-center" id="subtitle"><%= decision.subtitle %> <i class="fa fa-edit"></i></p>
@@ -118,14 +112,4 @@
 			<a href=<%= "mailto:?Subject=I%20Made%20a%20Decision%20with%20Decison%20Maker!&body=" + page %> target="_blank"><i class="fa fa-envelope-o fa-2x"></i></a>
 		</div>
 	</div>
-	<script type="text/javascript" src="/vendors/jquery.min.js"></script>
-	<script type="text/javascript" src="/vendors/colresizable-1.6.min.js"></script>
-	<script type="text/javascript" src="/javascripts/htmljsonify.js"></script>
-	<script type="text/javascript" src="/javascripts/quickedit.js"></script>
-	<script type="text/javascript" src="/javascripts/quickdroppable.js"></script>
-	<script type="text/javascript" src="/javascripts/criteria.js"></script>
-	<script type="text/javascript" src="/javascripts/column_sizing.js"></script>
-	<script type="text/javascript" src="/javascripts/post_decision.js"></script>
-	<script type="text/javascript" src="/javascripts/index.js"></script>
-	</body>
-</html>
+<% include partials/footer %>

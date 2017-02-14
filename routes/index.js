@@ -4,6 +4,10 @@ var request = require('request');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+        res.render('index', {title: "Decision Maker"});
+});
+
+router.get('/new', function(req, res, next){
 	// create new request
 	console.log(req.protocol + '://' + req.get('host') + process.env.API_URL + '/decisions/new');
 
@@ -43,7 +47,7 @@ router.get('/:hash', function(req, res, next){
 		// body.criteria[3].parentId = "priority-4";
        //
 		  res.cookie('token', req.session.token  || '');
-		  res.render('index', { decision: body, numColors: 5, page: req.protocol + '://' + req.get('host') + req.url, title: "Decision Maker"});
+		  res.render('show', { decision: body, numColors: 5, page: req.protocol + '://' + req.get('host') + req.url, title: "Decision Maker"});
 
 	});
 });

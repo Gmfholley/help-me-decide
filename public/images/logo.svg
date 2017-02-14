@@ -1,0 +1,28 @@
+<svg id="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" x="0px" y="0px">
+  <defs>
+    <linearGradient id="linear" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#FFD189">
+         <animate attributeName="stop-color" to="#E88F82" dur="500ms" repeatCount="5" begin="0s;logo.click" />
+      </stop>
+      <stop offset="25%" stop-color="#E88F82">
+        <animate attributeName="stop-color" to="#FBCFFF" dur="500ms" repeatCount="5" begin="0s;logo.click" />
+      </stop>
+      <stop offset="50%" stop-color="#FBCFFF">
+        <animate attributeName="stop-color" to="#868CE8" dur="500ms" repeatCount="5" begin="0s;logo.click" />
+      </stop>
+      <stop offset="75%" stop-color="#868CE8">
+        <animate attributeName="stop-color" to="#82F8FF" dur="500ms" repeatCount="5" begin="0s;logo.click" />
+      </stop>
+      <stop offset="100%" stop-color="#82F8FF">
+        <animate attributeName="stop-color" to="#FFD189" dur="500ms" repeatCount="5" begin="0s;logo.click" />
+      </stop>
+    </linearGradient>
+  </defs>
+  <polygon points="15,15 15,50 15,85 50,85 85,85 85,50 85,15 50,15" style="stroke:url(#linear); stroke-width:3px; fill:none;">
+  
+      <animate id="animation1" begin="0s;logo.click" fill="freeze"  attributeName="points" dur="1000ms"  to="15,15 0.513,50 15,85 50,99.497 85,85 99.497,50 85,15 50,0.513" repeatCount="1" />
+          
+      <animate id="animation2" begin="animation1.end" fill="freeze" attributeName="points" dur="1000ms"  to="15,15 15,50 15,85 50,85 85,85 85,50 85,15 50,15" repeatCount="1" />
+  </polygon>
+  <path d="M46.12,60.18v-4.1c0-6.34.37-7.24,5.15-12.16,3.81-3.88,4.85-5.67,4.85-8.36,0-3.51-2.31-5.6-6.19-5.6-4.4,0-6.72,2.24-7.16,7.16H38.13C38.51,29.21,42.76,25,50.37,25c7.09,0,11.49,4,11.49,10.52,0,4-1.27,6.19-6.34,11.19-4,4-4.25,4.7-4.25,10.82v2.61Zm6.79,10.6a4.29,4.29,0,1,1-4.25-4.33A4.32,4.32,0,0,1,52.91,70.78Z"/>
+</svg>

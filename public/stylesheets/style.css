@@ -1,16 +1,16 @@
 body {
-  font: 16px 'Source Sans Pro', sans-serif;
+  font: 1.1em 'Source Sans Pro', sans-serif;
   box-sizing: border-box;
 }
 em {
-  font: 16px Arial, sans-serif;
+  font: 1.1em Arial, sans-serif;
   font-style: italic;
 }
 em.color{
   color: #868CE8;
 }
 .spacer {
-  margin: 40px 0px;
+  padding: 20px 0px;
 }
 .inner-content {
   padding: 50px;
@@ -32,7 +32,6 @@ em.color{
 }
 .nav-bar-item a {
   text-decoration: none;
-  font-style: italic;
   font-size: 1.25em;
   color: #868CE8;
 }
@@ -46,12 +45,19 @@ em.color{
   max-width: 40px;
   margin: auto;
 }
+.intro {
+  max-width: 900px;
+  margin: 0px auto;
+}
 .features{
   padding-left: 0px;
   list-style-type: none;
 }
 .features li {
-  display: inline-block;
+  display: inline-flex;
+  display: -webkit-inline-flex; 
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   padding: 40px 0px;
   border-top: #FBCFFF solid 1px;
@@ -61,29 +67,33 @@ em.color{
   display: block;
   width: 100%;
   margin: 0px auto;
-  text-align: middle;
 }
-p.odd {
-  text-align: right;
+.odd {
+  flex-direction: row;
 }
-p.odd .feature-img {
-  float: left;
+.even {
+  flex-direction: row-reverse;
 }
-p.even .feature-img {
-  float: right;
+li.center {
+  justify-content: center;
 }
 .feature-img {
   width: 100%;
   max-width: 400px;
   margin-bottom: 40px;
 }
-@media(max-width: 600px){
-  p.even .feature-img, p.odd .feature-img {
-    display:block;
-    float: none;
+@media(max-width:600px){
+  .features li {
+    display: block;
+  }
+  .features li span {
+    display: block;
+    text-align: center;
+  }
+  li.center{
+    text-align: center;
   }
 }
-
 .text-left {
   text-align: left;
 }
